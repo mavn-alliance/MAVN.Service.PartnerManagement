@@ -1,0 +1,44 @@
+PartnerManagementService:
+    Db:
+        LogsConnString:
+            settings-key: PartnerManagementService-LogsConnString
+            types:
+              - AzureTableStorage
+        MsSqlConnectionString:
+            settings-key: PartnerManagementService-MsSqlConnectionString
+    Authentication:
+        GeneratedUsernameLength:
+            settings-key: PartnerManagementService-GeneratedUsernameLength
+        GeneratedPasswordLength:
+            settings-key: PartnerManagementService-GeneratedPasswordLength
+        SessionsServiceTokenTimeToLiveInSeconds:
+            settings-key: PartnerManagementService-SessionsServiceTokenTimeToLiveInSeconds
+SlackNotifications:
+    AzureQueue:
+        ConnectionString:
+            settings-key: SlackNotificationsConnString
+            types:
+                - AzureTableStorage
+        QueueName:
+            settings-key: SlackQueueName
+
+SessionsServiceClient:
+  ServiceUrl:
+    settings-key: AdminSessionsServiceUrl
+
+CredentialsServiceClient:
+    ServiceUrl :
+        settings-key: PartnerCredentialsServiceUrl
+
+PartnersIntegrationServiceClient:
+    ServiceUrl :
+        settings-key: PartnersIntegrationServiceUrl
+        
+CustomerProfileServiceClient:
+    ServiceUrl:
+        settings-key: CustomerProfileServiceUrl
+
+MonitoringServiceClient:
+    MonitoringServiceUrl:
+        settings-key: MonitoringServiceUrl
+
