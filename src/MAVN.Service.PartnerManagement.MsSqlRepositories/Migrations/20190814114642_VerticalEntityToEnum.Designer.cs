@@ -22,7 +22,7 @@ namespace MAVN.Service.PartnerManagement.MsSqlRepositories.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-            modelBuilder.Entity("Lykke.Service.PartnerManagement.MsSqlRepositories.Entities.ContactPersonEntity", b =>
+            modelBuilder.Entity("MAVN.Service.PartnerManagement.MsSqlRepositories.Entities.ContactPersonEntity", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -51,7 +51,7 @@ namespace MAVN.Service.PartnerManagement.MsSqlRepositories.Migrations
                     b.ToTable("contact_person");
                 });
 
-            modelBuilder.Entity("Lykke.Service.PartnerManagement.MsSqlRepositories.Entities.PartnerEntity", b =>
+            modelBuilder.Entity("MAVN.Service.PartnerManagement.MsSqlRepositories.Entities.PartnerEntity", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -86,9 +86,9 @@ namespace MAVN.Service.PartnerManagement.MsSqlRepositories.Migrations
                     b.ToTable("partner");
                 });
 
-            modelBuilder.Entity("Lykke.Service.PartnerManagement.MsSqlRepositories.Entities.PartnerEntity", b =>
+            modelBuilder.Entity("MAVN.Service.PartnerManagement.MsSqlRepositories.Entities.PartnerEntity", b =>
                 {
-                    b.OwnsMany("Lykke.Service.PartnerManagement.MsSqlRepositories.Entities.LocationEntity", "Locations", b1 =>
+                    b.OwnsMany("MAVN.Service.PartnerManagement.MsSqlRepositories.Entities.LocationEntity", "Locations", b1 =>
                         {
                             b1.Property<Guid>("Id")
                                 .ValueGeneratedOnAdd()
@@ -120,12 +120,12 @@ namespace MAVN.Service.PartnerManagement.MsSqlRepositories.Migrations
 
                             b1.ToTable("location");
 
-                            b1.HasOne("Lykke.Service.PartnerManagement.MsSqlRepositories.Entities.ContactPersonEntity", "ContactPerson")
+                            b1.HasOne("MAVN.Service.PartnerManagement.MsSqlRepositories.Entities.ContactPersonEntity", "ContactPerson")
                                 .WithMany()
                                 .HasForeignKey("ContactPersonId")
                                 .OnDelete(DeleteBehavior.Cascade);
 
-                            b1.HasOne("Lykke.Service.PartnerManagement.MsSqlRepositories.Entities.PartnerEntity", "Partner")
+                            b1.HasOne("MAVN.Service.PartnerManagement.MsSqlRepositories.Entities.PartnerEntity", "Partner")
                                 .WithMany("Locations")
                                 .HasForeignKey("PartnerId")
                                 .OnDelete(DeleteBehavior.Cascade);
