@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Lykke.Logs;
@@ -10,7 +10,7 @@ using MAVN.Service.PartnerManagement.Domain.Models;
 using MAVN.Service.PartnerManagement.Domain.Repositories;
 using MAVN.Service.PartnerManagement.DomainServices;
 using Moq;
-using Vertical = Lykke.Service.PartnerManagement.Domain.Models.Vertical;
+using Vertical = MAVN.Service.PartnerManagement.Domain.Models.Vertical;
 
 namespace MAVN.Service.PartnerManagement.Tests.DomainServices
 {
