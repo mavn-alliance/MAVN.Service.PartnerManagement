@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Linq;
 using FluentValidation;
 using MAVN.Service.PartnerManagement.Client.Models.Partner;
@@ -29,8 +29,8 @@ namespace MAVN.Service.PartnerManagement.Models.Validation.Partner
                 .WithMessage("The Created By should be valid non-empty Guid.");
 
             RuleFor(p => p.Locations)
-                .Must(p => p != null && p.Count > 0)
-                .WithMessage("The Partner should have at least one location.")
+                //.Must(p => p != null && p.Count > 0)
+                //.WithMessage("The Partner should have at least one location.")
                 .Must(l => l == null
                            || l.GroupBy(g => g.ExternalId).All(x => x.Count() == 1))
                 .WithMessage("Partner should have only locations with unique external ids."); 
