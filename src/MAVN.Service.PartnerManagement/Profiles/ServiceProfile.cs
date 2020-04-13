@@ -1,6 +1,7 @@
 using AutoMapper;
 using Lykke.Service.CustomerProfile.Client.Models.Responses;
 using MAVN.Service.PartnerManagement.Client.Models;
+using MAVN.Service.PartnerManagement.Client.Models.Authentication;
 using MAVN.Service.PartnerManagement.Client.Models.Location;
 using MAVN.Service.PartnerManagement.Client.Models.Partner;
 using MAVN.Service.PartnerManagement.Domain.Models;
@@ -45,6 +46,8 @@ namespace MAVN.Service.PartnerManagement.Profiles
             CreateMap<ContactPerson, ContactPersonModel>(MemberList.Destination);
             CreateMap<Location, LocationDetailsModel>(MemberList.Destination);
             CreateMap<Partner, PartnerDetailsModel>(MemberList.Destination);
+
+            CreateMap<AuthResult, AuthenticateResponseModel>(MemberList.Destination);
         }
     }
 }
