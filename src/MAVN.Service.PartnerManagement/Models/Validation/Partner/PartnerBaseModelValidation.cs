@@ -1,4 +1,4 @@
-using FluentValidation;
+﻿using FluentValidation;
 using MAVN.Service.PartnerManagement.Client.Models.Partner;
 
 namespace MAVN.Service.PartnerManagement.Models.Validation.Partner
@@ -8,12 +8,12 @@ namespace MAVN.Service.PartnerManagement.Models.Validation.Partner
     {
         public PartnerBaseModelValidation()
         {
-            RuleFor(p => p.Name)
-                .NotNull()
-                .NotEmpty()
-                .MinimumLength(3)
-                .MaximumLength(50)
-                .WithMessage("The partner name should be present and within a range of 3 to 50 characters long.");
+            //RuleFor(p => p.Name)
+            //    .NotNull()
+            //    .NotEmpty()
+            //    .MinimumLength(3)
+            //    .MaximumLength(50)
+            //    .WithMessage("The partner name should be present and within a range of 3 to 50 characters long.");
 
             RuleFor(p => p.Description)
                 .MinimumLength(3)
