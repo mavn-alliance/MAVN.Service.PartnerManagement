@@ -126,7 +126,7 @@ namespace MAVN.Service.PartnerManagement.MsSqlRepositories.Repositories
                     query = query.Where(p => p.Name.Contains(model.Name));
                 }
 
-                if (model.CreatedBy.HasValue && model.CreatedBy.Value == Guid.Empty)
+                if (model.CreatedBy.HasValue && model.CreatedBy.Value != Guid.Empty)
                 {
                     query = query.Where(p => p.CreatedBy == model.CreatedBy.Value);
                 }
