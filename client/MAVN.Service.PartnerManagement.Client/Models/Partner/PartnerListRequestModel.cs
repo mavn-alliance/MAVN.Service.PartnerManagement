@@ -1,3 +1,5 @@
+﻿using System;
+
 namespace MAVN.Service.PartnerManagement.Client.Models.Partner
 {
     /// <summary>
@@ -19,6 +21,11 @@ namespace MAVN.Service.PartnerManagement.Client.Models.Partner
         /// Name for filtering - optional
         /// </summary>
         public string Name { get; set; }
+
+        /// <summary>
+        /// Creator id - optional
+        /// </summary>
+        public Guid? CreatedBy { get; set; }
 
         /// <summary>
         /// Vertical for filtering - optional

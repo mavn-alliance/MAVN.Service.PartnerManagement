@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Lykke.Service.Credentials.Client;
@@ -6,6 +6,7 @@ using Lykke.Service.Credentials.Client.Models.Requests;
 using Lykke.Service.Credentials.Client.Models.Responses;
 using MAVN.Service.PartnerManagement.Domain.Exceptions;
 using MAVN.Service.PartnerManagement.Domain.Models;
+using MAVN.Service.PartnerManagement.Domain.Models.Dto;
 using Moq;
 using Xunit;
 
@@ -21,7 +22,7 @@ namespace MAVN.Service.PartnerManagement.Tests.DomainServices
                 .SetupGetActions();
 
             // Act
-            var partners = await fixture.PartnerService.GetAsync(1, 10, string.Empty, null);
+            var partners = await fixture.PartnerService.GetAsync(new PartnerListRequestDto { CurrentPage = 1, PageSize = 10 });
 
             // Assert
             Assert.Equal(fixture.Partners, partners);
@@ -37,7 +38,7 @@ namespace MAVN.Service.PartnerManagement.Tests.DomainServices
             }.SetupGetActions();
 
             // Act
-            var partners = await fixture.PartnerService.GetAsync(1, 10, string.Empty, null);
+            var partners = await fixture.PartnerService.GetAsync(new PartnerListRequestDto { CurrentPage = 1, PageSize = 10 });
 
             // Assert
             Assert.Equal(fixture.Partners, partners);

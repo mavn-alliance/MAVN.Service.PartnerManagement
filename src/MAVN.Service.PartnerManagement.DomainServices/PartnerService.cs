@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Net;
 using System.Threading.Tasks;
@@ -12,6 +12,7 @@ using Lykke.Service.Credentials.Client.Models.Responses;
 using Lykke.Service.CustomerProfile.Client;
 using MAVN.Service.PartnerManagement.Domain.Exceptions;
 using MAVN.Service.PartnerManagement.Domain.Models;
+using MAVN.Service.PartnerManagement.Domain.Models.Dto;
 using MAVN.Service.PartnerManagement.Domain.Repositories;
 using MAVN.Service.PartnerManagement.Domain.Services;
 using MoreLinq;
@@ -178,9 +179,9 @@ namespace MAVN.Service.PartnerManagement.DomainServices
             await _partnerRepository.DeleteAsync(partnerId);
         }
 
-        public async Task<(IReadOnlyCollection<Partner> partners, int totalSize)> GetAsync(int page, int pageSize, string name, Vertical? vertical)
+        public async Task<(IReadOnlyCollection<Partner> partners, int totalSize)> GetAsync(PartnerListRequestDto model)
         {
-            return await _partnerRepository.GetAsync(page, pageSize, name, vertical);
+            return await _partnerRepository.GetAsync(model);
         }
 
         public async Task<Partner> GetByIdAsync(Guid partnerId)

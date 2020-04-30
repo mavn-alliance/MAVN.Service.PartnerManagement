@@ -1,7 +1,8 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using MAVN.Service.PartnerManagement.Domain.Models;
+using MAVN.Service.PartnerManagement.Domain.Models.Dto;
 
 namespace MAVN.Service.PartnerManagement.Domain.Services
 {
@@ -10,7 +11,7 @@ namespace MAVN.Service.PartnerManagement.Domain.Services
         Task<Guid> CreateAsync(Partner partner);
         Task UpdateAsync(Partner partner);
         Task DeleteAsync(Guid partnerId);
-        Task<(IReadOnlyCollection<Partner> partners, int totalSize)> GetAsync(int page, int pageSize, string name, Vertical? vertical);
+        Task<(IReadOnlyCollection<Partner> partners, int totalSize)> GetAsync(PartnerListRequestDto model);
         Task<Partner> GetByIdAsync(Guid partnerId);
         Task<Partner> GetByClientIdAsync(string clientId);
         Task<Partner> GetByLocationIdAsync(Guid locationId);

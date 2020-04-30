@@ -8,6 +8,7 @@ using Lykke.Service.Credentials.Client.Models.Responses;
 using Lykke.Service.CustomerProfile.Client;
 using Lykke.Service.CustomerProfile.Client.Models.Responses;
 using MAVN.Service.PartnerManagement.Domain.Models;
+using MAVN.Service.PartnerManagement.Domain.Models.Dto;
 using MAVN.Service.PartnerManagement.Domain.Repositories;
 using MAVN.Service.PartnerManagement.Domain.Services;
 using MAVN.Service.PartnerManagement.DomainServices;
@@ -113,7 +114,7 @@ namespace MAVN.Service.PartnerManagement.Tests.DomainServices
 
         public PartnerServiceTestsFixture SetupGetActions()
         {
-            PartnerRepositoryMock.Setup(m => m.GetAsync(It.IsAny<int>(), It.IsAny<int>(), It.IsAny<string>(), It.IsAny<Vertical?>()))
+            PartnerRepositoryMock.Setup(m => m.GetAsync(It.IsAny<PartnerListRequestDto>()))
                 .ReturnsAsync(() => Partners);
 
             PartnerRepositoryMock.Setup(m => m.GetByIdAsync(It.IsAny<Guid>()))

@@ -1,10 +1,11 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
 using Lykke.Common.MsSql;
 using MAVN.Service.PartnerManagement.Domain.Models;
+using MAVN.Service.PartnerManagement.Domain.Models.Dto;
 using MAVN.Service.PartnerManagement.Domain.Repositories;
 using MAVN.Service.PartnerManagement.MsSqlRepositories.Entities;
 using Microsoft.EntityFrameworkCore;
@@ -109,27 +110,33 @@ namespace MAVN.Service.PartnerManagement.MsSqlRepositories.Repositories
             }
         }
 
-        public async Task<(IReadOnlyCollection<Partner> partners, int totalSize)> GetAsync(int page, int pageSize, string name, Vertical? vertical)
+        public async Task<(IReadOnlyCollection<Partner> partners, int totalSize)> GetAsync(PartnerListRequestDto model)
         {
             using (var context = _msSqlContextFactory.CreateDataContext())
             {
                 IQueryable<PartnerEntity> query = context.Partners;
 
-                if (vertical != null)
+                if (model.Vertical != null)
                 {
-                    query = query.Where(p => p.BusinessVertical == vertical);
+                    query = query.Where(p => p.BusinessVertical == model.Vertical);
                 }
 
-                if (!string.IsNullOrEmpty(name))
+                if (!string.IsNullOrEmpty(model.Name))
                 {
-                    query = query.Where(p => p.Name.Contains(name));
+                    query = query.Where(p => p.Name.Contains(model.Name));
+                }
+
+                if (model.CreatedBy.HasValue && model.CreatedBy.Value == Guid.Empty)
+                {
+                    query = query.Where(p => p.CreatedBy == model.CreatedBy.Value);
                 }
 
                 var count = await query.CountAsync();
+
                 var partners = await query
                     .OrderByDescending(p => p.CreatedAt)
-                    .Skip((page - 1) * pageSize)
-                    .Take(pageSize)
+                    .Skip((model.CurrentPage - 1) * model.PageSize)
+                    .Take(model.PageSize)
                     .Include(p => p.Locations)
                     .ToListAsync();
                 
