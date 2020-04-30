@@ -1,10 +1,11 @@
-using AutoMapper;
+﻿using AutoMapper;
 using Lykke.Service.CustomerProfile.Client.Models.Responses;
 using MAVN.Service.PartnerManagement.Client.Models;
 using MAVN.Service.PartnerManagement.Client.Models.Authentication;
 using MAVN.Service.PartnerManagement.Client.Models.Location;
 using MAVN.Service.PartnerManagement.Client.Models.Partner;
 using MAVN.Service.PartnerManagement.Domain.Models;
+using MAVN.Service.PartnerManagement.Domain.Models.Dto;
 
 namespace MAVN.Service.PartnerManagement.Profiles
 {
@@ -12,6 +13,9 @@ namespace MAVN.Service.PartnerManagement.Profiles
     {
         public ServiceProfile()
         {
+            CreateMap<PartnerListRequestModel, PartnerListRequestDto>();
+            CreateMap<Client.Models.Vertical, Domain.Models.Vertical>();
+
             CreateMap<PartnerCreateModel, Partner>(MemberList.Destination)
                 .ForMember(dest => dest.Id, opt => opt.Ignore())
                 .ForMember(dest => dest.CreatedAt, opt => opt.Ignore());

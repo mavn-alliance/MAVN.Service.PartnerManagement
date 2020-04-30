@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Net;
 using System.Threading.Tasks;
@@ -10,6 +10,7 @@ using MAVN.Service.PartnerManagement.Client.Enums;
 using MAVN.Service.PartnerManagement.Client.Models.Partner;
 using MAVN.Service.PartnerManagement.Domain.Exceptions;
 using MAVN.Service.PartnerManagement.Domain.Models;
+using MAVN.Service.PartnerManagement.Domain.Models.Dto;
 using MAVN.Service.PartnerManagement.Domain.Services;
 using Microsoft.AspNetCore.Mvc;
 
@@ -42,11 +43,7 @@ namespace MAVN.Service.PartnerManagement.Controllers
         [ProducesResponseType(typeof(PartnerListResponseModel), (int) HttpStatusCode.OK)]
         public async Task<PartnerListResponseModel> GetAsync([FromQuery] PartnerListRequestModel request)
         {
-            var result = await _partnerService.GetAsync(
-                request.CurrentPage,
-                request.PageSize,
-                request.Name,
-                _mapper.Map<Vertical?>(request.Vertical));
+            var result = await _partnerService.GetAsync(_mapper.Map<PartnerListRequestDto>(request));
 
             return new PartnerListResponseModel
             {
