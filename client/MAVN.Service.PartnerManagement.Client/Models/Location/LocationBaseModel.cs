@@ -35,11 +35,11 @@ namespace MAVN.Service.PartnerManagement.Client.Models.Location
         /// <summary>
         /// Longitude of the location
         /// </summary>
-        public double Longitude { get; set; }
+        public double? Longitude { get; set; }
 
         /// <summary>
         /// Latitude of the location
         /// </summary>
-        public double Latitude { get; set; }
+        public double? Latitude { get; set; }
     }
 }

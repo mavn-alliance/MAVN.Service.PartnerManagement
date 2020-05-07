@@ -26,11 +26,9 @@ namespace MAVN.Service.PartnerManagement.MsSqlRepositories.Entities
         public string AccountingIntegrationCode { get; set; }
         
         [Column("longitude")]
-        [Required]
-        public double Longitude { get; set; }
+        public double? Longitude { get; set; }
 
         [Column("latitude")]
-        [Required]
-        public double Latitude { get; set; }
+        public double? Latitude { get; set; }
     }
 }
