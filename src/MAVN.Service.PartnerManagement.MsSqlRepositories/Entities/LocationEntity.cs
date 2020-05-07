@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
@@ -24,5 +24,11 @@ namespace MAVN.Service.PartnerManagement.MsSqlRepositories.Entities
         [Column("accounting_integration_code")]
         [Required]
         public string AccountingIntegrationCode { get; set; }
+        
+        [Column("longitude")]
+        public double? Longitude { get; set; }
+
+        [Column("latitude")]
+        public double? Latitude { get; set; }
     }
 }

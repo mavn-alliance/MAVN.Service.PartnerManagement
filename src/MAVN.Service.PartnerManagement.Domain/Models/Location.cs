@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 
 namespace MAVN.Service.PartnerManagement.Domain.Models
 {
@@ -21,5 +21,9 @@ namespace MAVN.Service.PartnerManagement.Domain.Models
         public string ExternalId { get; set; }
 
         public string AccountingIntegrationCode { get; set; }
+
+        public double? Longitude { get; set; }
+
+        public double? Latitude { get; set; }
     }
 }

@@ -4,14 +4,16 @@ using MAVN.Service.PartnerManagement.MsSqlRepositories;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace MAVN.Service.PartnerManagement.MsSqlRepositories.Migrations
 {
     [DbContext(typeof(PartnerManagementContext))]
-    partial class PartnerManagementContextModelSnapshot : ModelSnapshot
+    [Migration("20200507070655_AddLatitudeAndLongitudeToLocation")]
+    partial class AddLatitudeAndLongitudeToLocation
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -89,10 +91,10 @@ namespace MAVN.Service.PartnerManagement.MsSqlRepositories.Migrations
                             b1.Property<string>("ExternalId")
                                 .HasColumnName("external_id");
 
-                            b1.Property<double?>("Latitude")
+                            b1.Property<double>("Latitude")
                                 .HasColumnName("latitude");
 
-                            b1.Property<double?>("Longitude")
+                            b1.Property<double>("Longitude")
                                 .HasColumnName("longitude");
 
                             b1.Property<string>("Name")

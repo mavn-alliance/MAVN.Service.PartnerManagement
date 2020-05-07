@@ -1,3 +1,4 @@
+﻿using System;
 using System.Threading.Tasks;
 using AutoMapper;
 using MAVN.Service.PartnerManagement.Client.Api;
@@ -41,7 +42,7 @@ namespace MAVN.Service.PartnerManagement.Controllers
         /// <returns><see cref="LocationInfoResponse"/></returns>
         /// <response code="200">An base location information for given filter</response>
         [HttpGet("byid")]
-        public async Task<LocationInfoResponse> GetByIdAsync(string id)
+        public async Task<LocationInfoResponse> GetByIdAsync(Guid id)
         {
             var result = await _locationService.GetByIdAsync(id);
 
