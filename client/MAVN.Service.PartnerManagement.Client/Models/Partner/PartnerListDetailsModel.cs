@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using MAVN.Service.PartnerManagement.Client.Models.Location;
 
@@ -29,5 +29,10 @@ namespace MAVN.Service.PartnerManagement.Client.Models.Partner
         /// Represents the date of creation of the partner
         /// </summary>
         public DateTime CreatedAt { get; set; }
+
+        /// <summary>
+        /// Partner locations details
+        /// </summary>
+        public IReadOnlyCollection<PartnerListLocationModel> Locations { get; set; }
     }
 }
