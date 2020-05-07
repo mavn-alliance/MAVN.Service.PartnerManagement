@@ -1,4 +1,4 @@
-using FluentValidation;
+﻿using FluentValidation;
 using MAVN.Service.PartnerManagement.Client.Models.Location;
 using MAVN.Service.PartnerManagement.Client.Models.Partner;
 using MAVN.Service.PartnerManagement.Models.Validation.ContactPerson;
@@ -39,6 +39,16 @@ namespace MAVN.Service.PartnerManagement.Models.Validation.Location
                 .MinimumLength(1)
                 .MaximumLength(80)
                 .WithMessage("The accounting integration code should be within a range of 1 to 80 characters long.");
+
+            RuleFor(x => x.Latitude)
+                .NotNull()
+                .NotEmpty()
+                .WithMessage("Latitude is required.");
+
+            RuleFor(x => x.Longitude)
+                .NotNull()
+                .NotEmpty()
+                .WithMessage("Longitude is required.");
 
         }
     }

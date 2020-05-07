@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -32,7 +32,7 @@ namespace MAVN.Service.PartnerManagement.DomainServices
             _log = logFactory.CreateLog(this);
         }
 
-        public Task<Location> GetByIdAsync(string id)
+        public Task<Location> GetByIdAsync(Guid id)
         {
             return _locationRepository.GetByIdAsync(id);
         }

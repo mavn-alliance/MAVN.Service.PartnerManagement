@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -34,7 +34,7 @@ namespace MAVN.Service.PartnerManagement.MsSqlRepositories.Repositories
             }
         }
 
-        public async Task<Location> GetByIdAsync(string id)
+        public async Task<Location> GetByIdAsync(Guid id)
         {
             using (var context = _msSqlContextFactory.CreateDataContext())
             {

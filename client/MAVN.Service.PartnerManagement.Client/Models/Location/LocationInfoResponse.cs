@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 
 namespace MAVN.Service.PartnerManagement.Client.Models.Location
 {
@@ -36,5 +36,15 @@ namespace MAVN.Service.PartnerManagement.Client.Models.Location
         /// Accounting integration code
         /// </summary>
         public string AccountingIntegrationCode { get; set; }
+
+        /// <summary>
+        /// Longitude of the location
+        /// </summary>
+        public double Longitude { get; set; }
+
+        /// <summary>
+        /// Latitude of the location
+        /// </summary>
+        public double Latitude { get; set; }
     }
 }

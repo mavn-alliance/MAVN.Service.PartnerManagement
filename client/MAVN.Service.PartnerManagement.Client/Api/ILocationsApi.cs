@@ -1,3 +1,4 @@
+﻿using System;
 using System.Threading.Tasks;
 using JetBrains.Annotations;
 using MAVN.Service.PartnerManagement.Client.Models.Location;
@@ -25,6 +26,6 @@ namespace MAVN.Service.PartnerManagement.Client.Api
         /// <param name="id">string</param>
         /// <returns><see cref="LocationInfoResponse"/></returns>
         [Get("/api/locations/byid")]
-        Task<LocationInfoResponse> GetByIdAsync(string id);
+        Task<LocationInfoResponse> GetByIdAsync(Guid id);
     }
 }
