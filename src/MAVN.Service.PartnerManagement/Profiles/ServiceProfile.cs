@@ -46,6 +46,7 @@ namespace MAVN.Service.PartnerManagement.Profiles
                 .ForMember(dest => dest.PhoneNumber, opt => opt.MapFrom(src => src.PartnerContact.PhoneNumber));
 
             CreateMap<Partner, PartnerListDetailsModel>(MemberList.Destination);
+            CreateMap<Location, PartnerListLocationModel>(MemberList.Destination);
 
             CreateMap<ContactPerson, ContactPersonModel>(MemberList.Destination);
             CreateMap<Location, LocationDetailsModel>(MemberList.Destination);
