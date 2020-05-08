@@ -1,9 +1,9 @@
 using Autofac;
 using JetBrains.Annotations;
-using Lykke.Service.Credentials.Client;
-using Lykke.Service.CustomerProfile.Client;
+using MAVN.Service.Credentials.Client;
+using MAVN.Service.CustomerProfile.Client;
 using MAVN.Service.PartnerManagement.Settings;
-using Lykke.Service.Sessions.Client;
+using MAVN.Service.Sessions.Client;
 using Lykke.SettingsReader;
 
 namespace MAVN.Service.PartnerManagement.Modules

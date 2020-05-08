@@ -4,14 +4,14 @@ using System.Threading.Tasks;
 using Common.Log;
 using Lykke.Common.ApiLibrary.Exceptions;
 using Lykke.Common.Log;
-using Lykke.Service.Credentials.Client;
-using Lykke.Service.Credentials.Client.Models.Requests;
-using Lykke.Service.Credentials.Client.Models.Responses;
+using MAVN.Service.Credentials.Client;
+using MAVN.Service.Credentials.Client.Models.Requests;
+using MAVN.Service.Credentials.Client.Models.Responses;
 using MAVN.Service.PartnerManagement.Domain.Exceptions;
 using MAVN.Service.PartnerManagement.Domain.Models;
 using MAVN.Service.PartnerManagement.Domain.Services;
-using Lykke.Service.Sessions.Client;
-using Lykke.Service.Sessions.Client.Models;
+using MAVN.Service.Sessions.Client;
+using MAVN.Service.Sessions.Client.Models;
 
 namespace MAVN.Service.PartnerManagement.DomainServices
 {
