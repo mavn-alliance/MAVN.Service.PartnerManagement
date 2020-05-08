@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
-using Falcon.Numerics;
+using MAVN.Numerics;
 using MAVN.Service.PartnerManagement.Domain.Models;
 
 namespace MAVN.Service.PartnerManagement.MsSqlRepositories.Entities

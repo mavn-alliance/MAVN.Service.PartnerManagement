@@ -1,6 +1,6 @@
 using System;
 using System.Collections.Generic;
-using Falcon.Numerics;
+using MAVN.Numerics;
 
 namespace MAVN.Service.PartnerManagement.Domain.Models
 {

@@ -1,8 +1,8 @@
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using Lykke.Service.CustomerProfile.Client.Models.Enums;
-using Lykke.Service.CustomerProfile.Client.Models.Requests;
+using MAVN.Service.CustomerProfile.Client.Models.Enums;
+using MAVN.Service.CustomerProfile.Client.Models.Requests;
 using MAVN.Service.PartnerManagement.Domain.Exceptions;
 using MAVN.Service.PartnerManagement.Domain.Models;
 using Moq;

@@ -1,11 +1,11 @@
 using Autofac;
 using JetBrains.Annotations;
-using Lykke.Service.Credentials.Client;
+using MAVN.Service.Credentials.Client;
 using MAVN.Service.PartnerManagement.Domain.Services;
 using MAVN.Service.PartnerManagement.DomainServices;
 using MAVN.Service.PartnerManagement.MsSqlRepositories;
 using MAVN.Service.PartnerManagement.Settings;
-using Lykke.Service.Sessions.Client;
+using MAVN.Service.Sessions.Client;
 using Lykke.SettingsReader;
 
 namespace MAVN.Service.PartnerManagement.Modules

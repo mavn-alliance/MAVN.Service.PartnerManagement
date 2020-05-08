@@ -1,5 +1,5 @@
-﻿using AutoMapper;
-using Lykke.Service.CustomerProfile.Client.Models.Responses;
+using AutoMapper;
+using MAVN.Service.CustomerProfile.Client.Models.Responses;
 using MAVN.Service.PartnerManagement.Client.Models;
 using MAVN.Service.PartnerManagement.Client.Models.Authentication;
 using MAVN.Service.PartnerManagement.Client.Models.Location;

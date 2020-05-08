@@ -1,11 +1,11 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Lykke.Logs;
-using Lykke.Service.CustomerProfile.Client;
-using Lykke.Service.CustomerProfile.Client.Models.Enums;
-using Lykke.Service.CustomerProfile.Client.Models.Requests;
-using Lykke.Service.CustomerProfile.Client.Models.Responses;
+using MAVN.Service.CustomerProfile.Client;
+using MAVN.Service.CustomerProfile.Client.Models.Enums;
+using MAVN.Service.CustomerProfile.Client.Models.Requests;
+using MAVN.Service.CustomerProfile.Client.Models.Responses;
 using MAVN.Service.PartnerManagement.Domain.Models;
 using MAVN.Service.PartnerManagement.Domain.Repositories;
 using MAVN.Service.PartnerManagement.DomainServices;
