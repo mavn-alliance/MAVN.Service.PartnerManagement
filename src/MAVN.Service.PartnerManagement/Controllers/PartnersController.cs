@@ -85,7 +85,6 @@ namespace MAVN.Service.PartnerManagement.Controllers
                 default:
                     throw new ArgumentOutOfRangeException();
             }
-
         }
 
         /// <summary>
