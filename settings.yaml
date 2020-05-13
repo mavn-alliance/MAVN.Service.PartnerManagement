@@ -38,6 +38,10 @@ CustomerProfileServiceClient:
     ServiceUrl:
         settings-key: CustomerProfileServiceUrl
 
+PaymentManagementServiceClient:
+    ServiceUrl:
+        settings-key: PaymentManagementServiceUrl
+
 MonitoringServiceClient:
     MonitoringServiceUrl:
         settings-key: MonitoringServiceUrl

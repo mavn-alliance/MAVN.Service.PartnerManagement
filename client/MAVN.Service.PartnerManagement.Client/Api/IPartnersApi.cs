@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using JetBrains.Annotations;
@@ -75,5 +75,13 @@ namespace MAVN.Service.PartnerManagement.Client.Api
         /// <response code="200">A collection of partners.</response>
         [Post("/api/partners/list")]
         Task<IReadOnlyCollection<PartnerListDetailsModel>> GetByIdsAsync(Guid[] ids);
+
+        /// <summary>
+        /// Check if partner has ability to do something
+        /// </summary>
+        /// <param name="request">.</param>
+        /// <response code="200">Check ability response.</response>
+        [Get("/api/partners/ability/check")]
+        Task<CheckAbilityResponse> CheckAbilityAsync([Query] CheckAbilityRequest request);
     }
 }

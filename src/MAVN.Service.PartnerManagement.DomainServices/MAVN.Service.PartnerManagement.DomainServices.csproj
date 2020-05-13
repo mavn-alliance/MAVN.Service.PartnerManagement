@@ -7,6 +7,7 @@
     <PackageReference Include="AutoMapper" Version="9.0.0" />
     <PackageReference Include="MAVN.Service.Credentials.Client" Version="1.0.1" />
     <PackageReference Include="MAVN.Service.CustomerProfile.Client" Version="1.2.0" />
+    <PackageReference Include="MAVN.Service.PaymentManagement.Client" Version="1.13.4" />
     <PackageReference Include="MAVN.Service.Sessions.Client" Version="1.0.1" />
   </ItemGroup>
   <ItemGroup>

@@ -8,10 +8,14 @@ using Lykke.Common.Log;
 using MAVN.Service.PartnerManagement.Client.Api;
 using MAVN.Service.PartnerManagement.Client.Enums;
 using MAVN.Service.PartnerManagement.Client.Models.Partner;
+using MAVN.Service.PartnerManagement.Constants;
 using MAVN.Service.PartnerManagement.Domain.Exceptions;
 using MAVN.Service.PartnerManagement.Domain.Models;
 using MAVN.Service.PartnerManagement.Domain.Models.Dto;
 using MAVN.Service.PartnerManagement.Domain.Services;
+using MAVN.Service.PaymentManagement.Client;
+using MAVN.Service.PaymentManagement.Client.Models.Requests;
+using MAVN.Service.PaymentManagement.Client.Models.Responses;
 using Microsoft.AspNetCore.Mvc;
 
 namespace MAVN.Service.PartnerManagement.Controllers
@@ -21,15 +25,18 @@ namespace MAVN.Service.PartnerManagement.Controllers
     public class PartnersController : Controller, IPartnersApi
     {
         private readonly IPartnerService _partnerService;
+        private readonly IPaymentManagementClient _paymentManagementClient;
         private readonly IMapper _mapper;
         private readonly ILog _log;
 
         public PartnersController(
             IPartnerService partnerService,
+            IPaymentManagementClient paymentManagementClient,
             IMapper mapper,
             ILogFactory logFactory)
         {
             _partnerService = partnerService;
+            _paymentManagementClient = paymentManagementClient;
             _mapper = mapper;
             _log = logFactory.CreateLog(this);
         }
@@ -51,6 +58,33 @@ namespace MAVN.Service.PartnerManagement.Controllers
                 TotalSize = result.totalSize,
                 PartnersDetails = _mapper.Map<IReadOnlyCollection<PartnerListDetailsModel>>(result.partners)
             };
+        }
+
+        /// <summary>
+        /// Check if partner has ability to do something
+        /// </summary>
+        /// <param name="request">.</param>
+        /// <response code="200">Check ability response.</response>
+        [HttpGet("ability/check")]
+        [ProducesResponseType(typeof(CheckAbilityResponse), (int)HttpStatusCode.OK)]
+        public async Task<CheckAbilityResponse> CheckAbilityAsync([FromQuery] CheckAbilityRequest request)
+        {
+            switch (request.PartnerAbility.Value)
+            {
+                case PartnerAbility.PublishSmartVoucherCampaign:
+                    var result =
+                        await _paymentManagementClient.Api.CheckPaymentIntegrationAsync(
+                            new PaymentIntegrationCheckRequest { PartnerId = request.PartnerId });
+                    return new CheckAbilityResponse
+                    {
+                        HasAbility = result == CheckPaymentIntegrationErrorCode.None,
+                        InabilityReason = result != CheckPaymentIntegrationErrorCode.None
+                            ? PartnerInabilityConstants.PaymentIntegrationDetailsMissing
+                            : null
+                    };
+                default:
+                    throw new ArgumentOutOfRangeException();
+            }
         }
 
         /// <summary>
