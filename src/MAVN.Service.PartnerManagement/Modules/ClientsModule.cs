@@ -1,10 +1,11 @@
-using Autofac;
+﻿using Autofac;
 using JetBrains.Annotations;
 using MAVN.Service.Credentials.Client;
 using MAVN.Service.CustomerProfile.Client;
 using MAVN.Service.PartnerManagement.Settings;
 using MAVN.Service.Sessions.Client;
 using Lykke.SettingsReader;
+using MAVN.Service.PaymentManagement.Client;
 
 namespace MAVN.Service.PartnerManagement.Modules
 {
@@ -25,6 +26,8 @@ namespace MAVN.Service.PartnerManagement.Modules
             builder.RegisterSessionsServiceClient(_appSettings.CurrentValue.SessionsServiceClient);
 
             builder.RegisterCustomerProfileClient(_appSettings.CurrentValue.CustomerProfileServiceClient);
+
+            builder.RegisterPaymentManagementClient(_appSettings.CurrentValue.PaymentManagementServiceClient, null);
         }
     }
 }
