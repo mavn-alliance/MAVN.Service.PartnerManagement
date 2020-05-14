@@ -8,7 +8,6 @@ using Lykke.Common.Log;
 using MAVN.Service.PartnerManagement.Client.Api;
 using MAVN.Service.PartnerManagement.Client.Enums;
 using MAVN.Service.PartnerManagement.Client.Models.Partner;
-using MAVN.Service.PartnerManagement.Constants;
 using MAVN.Service.PartnerManagement.Domain.Exceptions;
 using MAVN.Service.PartnerManagement.Domain.Models;
 using MAVN.Service.PartnerManagement.Domain.Models.Dto;
@@ -79,8 +78,8 @@ namespace MAVN.Service.PartnerManagement.Controllers
                     {
                         HasAbility = result == CheckPaymentIntegrationErrorCode.None,
                         InabilityReason = result != CheckPaymentIntegrationErrorCode.None
-                            ? PartnerInabilityConstants.PaymentIntegrationDetailsMissing
-                            : null
+                            ? PartnerInabilityErrorCodes.InvalidPaymentIntegrationDetails
+                            : PartnerInabilityErrorCodes.None
                     };
                 default:
                     throw new ArgumentOutOfRangeException();
