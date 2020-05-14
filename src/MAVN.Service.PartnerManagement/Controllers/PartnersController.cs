@@ -78,7 +78,7 @@ namespace MAVN.Service.PartnerManagement.Controllers
                     {
                         HasAbility = result == CheckPaymentIntegrationErrorCode.None,
                         InabilityReason = result != CheckPaymentIntegrationErrorCode.None
-                            ? PartnerInabilityErrorCodes.PaymentIntegrationDetailsMissing
+                            ? PartnerInabilityErrorCodes.InvalidPaymentIntegrationDetails
                             : PartnerInabilityErrorCodes.None
                     };
                 default:

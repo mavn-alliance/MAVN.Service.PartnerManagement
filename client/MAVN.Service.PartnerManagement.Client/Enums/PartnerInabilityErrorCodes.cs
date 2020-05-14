@@ -1,8 +1,17 @@
 ﻿namespace MAVN.Service.PartnerManagement.Client.Enums
 {
+    /// <summary>
+    /// Payment inability error code
+    /// </summary>
     public enum PartnerInabilityErrorCodes
     {
+        /// <summary>
+        /// None
+        /// </summary>
         None,
-        PaymentIntegrationDetailsMissing
+        /// <summary>
+        /// InvalidPaymentIntegrationDetails
+        /// </summary>
+        InvalidPaymentIntegrationDetails
     }
 }
