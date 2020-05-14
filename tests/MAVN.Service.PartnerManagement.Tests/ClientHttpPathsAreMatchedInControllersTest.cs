@@ -1,8 +1,7 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
-using MAVN.Service.PartnerManagement;
 using MAVN.Service.PartnerManagement.Client;
 using Microsoft.AspNetCore.Mvc;
 using Refit;
