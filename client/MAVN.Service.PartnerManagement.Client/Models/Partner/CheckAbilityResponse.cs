@@ -10,7 +10,7 @@ namespace MAVN.Service.PartnerManagement.Client.Models.Partner
         /// <summary>Boolean if the partner has ability</summary>
         public bool HasAbility { get; set; }
 
-        /// <summary>The reason for the inability</summary>
+        /// <summary>Error code for no ability cases</summary>
         public PartnerInabilityErrorCodes ErrorCode { get; set; }
     }
 }
