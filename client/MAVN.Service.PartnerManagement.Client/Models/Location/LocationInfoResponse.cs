@@ -46,10 +46,5 @@ namespace MAVN.Service.PartnerManagement.Client.Models.Location
         /// Latitude of the location
         /// </summary>
         public double? Latitude { get; set; }
-
-        /// <summary>
-        /// Geohash of the location
-        /// </summary>
-        public string Geohash { get; set; }
     }
 }

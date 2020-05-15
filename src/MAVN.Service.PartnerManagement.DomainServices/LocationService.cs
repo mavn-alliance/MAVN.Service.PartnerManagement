@@ -21,7 +21,7 @@ namespace MAVN.Service.PartnerManagement.DomainServices
     {
         private readonly ICustomerProfileClient _customerProfileClient;
         private readonly ILocationRepository _locationRepository;
-        private readonly Geohasher _geohasher;
+        private readonly Geohasher _geohasher = new Geohasher();
         private readonly ILog _log;
 
         public LocationService(
@@ -32,7 +32,6 @@ namespace MAVN.Service.PartnerManagement.DomainServices
             _customerProfileClient = customerProfileClient;
             _locationRepository = locationRepository;
             _log = logFactory.CreateLog(this);
-            _geohasher = new Geohasher();
         }
 
         public Task<Location> GetByIdAsync(Guid id)

@@ -27,7 +27,7 @@ namespace MAVN.Service.PartnerManagement.DomainServices
         private readonly ICredentialsClient _credentialsClient;
         private readonly ICustomerProfileClient _customerProfileClient;
         private readonly IMapper _mapper;
-        private readonly Geohasher _geohasher;
+        private readonly Geohasher _geohasher = new Geohasher();
         private readonly ILog _log;
 
         public PartnerService(
@@ -44,7 +44,6 @@ namespace MAVN.Service.PartnerManagement.DomainServices
             _customerProfileClient = customerProfileClient;
             _mapper = mapper;
             _log = logFactory.CreateLog(this);
-            _geohasher = new Geohasher();
         }
 
         public async Task<Guid> CreateAsync(Partner partner)
