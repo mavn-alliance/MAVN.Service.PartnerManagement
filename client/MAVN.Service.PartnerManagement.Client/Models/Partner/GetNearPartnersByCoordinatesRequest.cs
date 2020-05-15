@@ -13,9 +13,10 @@
         /// The longitude you want to search around
         /// </summary>
         public double Longitude { get; set; }
+
         /// <summary>
         /// The geohash level used for the search 
         /// </summary>
-        public short GeohashLevel { get; set; }
+        public short GeohashLevel { get; set; } = 5;
     }
 }
