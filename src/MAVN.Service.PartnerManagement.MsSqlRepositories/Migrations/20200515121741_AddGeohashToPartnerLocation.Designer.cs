@@ -4,14 +4,16 @@ using MAVN.Service.PartnerManagement.MsSqlRepositories;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace MAVN.Service.PartnerManagement.MsSqlRepositories.Migrations
 {
     [DbContext(typeof(PartnerManagementContext))]
-    partial class PartnerManagementContextModelSnapshot : ModelSnapshot
+    [Migration("20200515121741_AddGeohashToPartnerLocation")]
+    partial class AddGeohashToPartnerLocation
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -107,8 +109,6 @@ namespace MAVN.Service.PartnerManagement.MsSqlRepositories.Migrations
                             b1.HasKey("Id");
 
                             b1.HasIndex("ExternalId");
-
-                            b1.HasIndex("Geohash");
 
                             b1.HasIndex("PartnerId");
 

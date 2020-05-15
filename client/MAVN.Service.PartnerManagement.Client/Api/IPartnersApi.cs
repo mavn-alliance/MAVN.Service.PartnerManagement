@@ -83,5 +83,14 @@ namespace MAVN.Service.PartnerManagement.Client.Api
         /// <response code="200">Check ability response.</response>
         [Get("/api/partners/ability/check")]
         Task<CheckAbilityResponse> CheckAbilityAsync([Query] CheckAbilityRequest request);
+
+        /// <summary>
+        /// Gets ids of partners which are close to passed longitude and latitude
+        /// </summary>
+        /// <param name="request">request parameters.</param>
+        /// <response code="200">A collection of partner ids.</response>
+        [Get("/api/partners/byCoordinates")]
+        Task<GetNearPartnersByCoordinatesResponse> GetNearPartnerByCoordinatesAsync(
+            [Query] GetNearPartnersByCoordinatesRequest request);
     }
 }

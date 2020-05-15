@@ -1,4 +1,4 @@
-using AutoMapper;
+﻿using AutoMapper;
 using MAVN.Service.CustomerProfile.Client.Models.Responses;
 using MAVN.Service.PartnerManagement.Client.Models;
 using MAVN.Service.PartnerManagement.Client.Models.Authentication;
@@ -28,12 +28,14 @@ namespace MAVN.Service.PartnerManagement.Profiles
                 .ForMember(dest => dest.Id, opt => opt.Ignore())
                 .ForMember(dest => dest.PartnerId, opt => opt.Ignore())
                 .ForMember(dest => dest.CreatedAt, opt => opt.Ignore())
-                .ForMember(dest => dest.CreatedBy, opt => opt.Ignore());
+                .ForMember(dest => dest.CreatedBy, opt => opt.Ignore())
+                .ForMember(dest => dest.Geohash, opt => opt.Ignore());
 
             CreateMap<LocationUpdateModel, Location>(MemberList.Destination)
                 .ForMember(dest => dest.PartnerId, opt => opt.Ignore())
                 .ForMember(dest => dest.CreatedAt, opt => opt.Ignore())
-                .ForMember(dest => dest.CreatedBy, opt => opt.Ignore());
+                .ForMember(dest => dest.CreatedBy, opt => opt.Ignore())
+                .ForMember(dest => dest.Geohash, opt => opt.Ignore());
 
             CreateMap<Location, LocationInfoResponse>(MemberList.Destination);
 

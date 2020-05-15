@@ -1,10 +1,11 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <TargetFramework>netcoreapp2.2</TargetFramework>
     <Version>1.0.0</Version>
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="AutoMapper" Version="9.0.0" />
+    <PackageReference Include="geohash-dotnet" Version="1.0.4" />
     <PackageReference Include="MAVN.Service.Credentials.Client" Version="1.0.1" />
     <PackageReference Include="MAVN.Service.CustomerProfile.Client" Version="1.2.0" />
     <PackageReference Include="MAVN.Service.PaymentManagement.Client" Version="1.13.4" />

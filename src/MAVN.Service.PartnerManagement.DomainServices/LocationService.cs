@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Common;
 using Common.Log;
+using Geohash;
 using Lykke.Common.Log;
 using MAVN.Service.CustomerProfile.Client;
 using MAVN.Service.CustomerProfile.Client.Models.Enums;
@@ -20,6 +21,7 @@ namespace MAVN.Service.PartnerManagement.DomainServices
     {
         private readonly ICustomerProfileClient _customerProfileClient;
         private readonly ILocationRepository _locationRepository;
+        private readonly Geohasher _geohasher = new Geohasher();
         private readonly ILog _log;
 
         public LocationService(
@@ -58,6 +60,8 @@ namespace MAVN.Service.PartnerManagement.DomainServices
             {
                 location.Id = Guid.NewGuid();
                 location.CreatedBy = partner.CreatedBy;
+                SetGeohash(location);
+
                 _log.Info("Location creating", context: $"location: {location.ToJson()}");
 
                 customerProfileCreateActions.Add(CreatePartnerContact(location));
@@ -121,6 +125,7 @@ namespace MAVN.Service.PartnerManagement.DomainServices
                     var existingLocation = existingLocations.First(p => p.Id == location.Id);
                     location.CreatedBy = existingLocation.CreatedBy;
                     location.CreatedAt = existingLocation.CreatedAt;
+                    SetGeohash(location);
 
                     _log.Info("Location updating", context: $"location: {location.ToJson()}");
 
@@ -134,6 +139,7 @@ namespace MAVN.Service.PartnerManagement.DomainServices
                 {
                     location.Id = Guid.NewGuid();
                     location.CreatedBy = partner.CreatedBy;
+                    SetGeohash(location);
 
                     _log.Info("Location creating", context: $"location: {location.ToJson()}");
 
@@ -168,6 +174,14 @@ namespace MAVN.Service.PartnerManagement.DomainServices
             processedLocations.AddRange(createResult.Select(r => r.Location));
 
             return processedLocations;
+        }
+
+        private void SetGeohash(Location location)
+        {
+            if (location.Latitude.HasValue && location.Longitude.HasValue)
+                location.Geohash = _geohasher.Encode(location.Latitude.Value, location.Longitude.Value, precision: 9);
+            else
+                location.Geohash = null;
         }
 
         private async Task<(PartnerContactErrorCodes, Location)> UpdatePartnerContact(Location location)

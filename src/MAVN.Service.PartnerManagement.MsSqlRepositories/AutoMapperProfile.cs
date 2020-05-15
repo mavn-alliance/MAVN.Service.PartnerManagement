@@ -1,4 +1,4 @@
-using AutoMapper;
+﻿using AutoMapper;
 using MAVN.Service.PartnerManagement.Domain.Models;
 using MAVN.Service.PartnerManagement.MsSqlRepositories.Entities;
 
@@ -16,7 +16,8 @@ namespace MAVN.Service.PartnerManagement.MsSqlRepositories
 
             CreateMap<Location, LocationEntity>(MemberList.Destination)
                 .ForMember(dest => dest.PartnerId, opt => opt.Ignore())
-                .ForMember(dest => dest.Partner, opt => opt.Ignore());
+                .ForMember(dest => dest.
+                    Partner, opt => opt.Ignore());
 
             CreateMap<LocationEntity, Location>(MemberList.Destination)
                 .ForMember(dest => dest.ContactPerson, opt => opt.Ignore());
