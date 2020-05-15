@@ -39,6 +39,14 @@ namespace MAVN.Service.PartnerManagement.Models.Validation.Location
                 .MinimumLength(1)
                 .MaximumLength(80)
                 .WithMessage("The accounting integration code should be within a range of 1 to 80 characters long.");
+
+            RuleFor(p => p.Latitude)
+                .InclusiveBetween(-90, 90)
+                .WithMessage("Latitude value must be between -90 and 90.");
+
+            RuleFor(p => p.Longitude)
+                .InclusiveBetween(-180, 80)
+                .WithMessage("Longitude value must be between -180 and 80.");
         }
     }
 }

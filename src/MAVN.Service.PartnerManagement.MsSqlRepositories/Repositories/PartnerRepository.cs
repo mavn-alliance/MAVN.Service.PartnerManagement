@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -189,6 +189,19 @@ namespace MAVN.Service.PartnerManagement.MsSqlRepositories.Repositories
                     .ToListAsync();
 
                 return _mapper.Map<IReadOnlyCollection<Partner>>(partners);
+            }
+        }
+
+        public async Task<Guid[]> GetPartnerIdsByGeohashAsync(string geohash)
+        {
+            using (var context = _msSqlContextFactory.CreateDataContext())
+            {
+                var result = await context.Partners
+                    .Where(p => p.Locations.Any(l => l.Geohash.StartsWith(geohash)))
+                    .Select(p => p.Id)
+                    .ToArrayAsync();
+
+                return result;
             }
         }
     }

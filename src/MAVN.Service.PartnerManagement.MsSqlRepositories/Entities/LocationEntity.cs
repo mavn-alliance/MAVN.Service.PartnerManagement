@@ -30,5 +30,8 @@ namespace MAVN.Service.PartnerManagement.MsSqlRepositories.Entities
 
         [Column("latitude")]
         public double? Latitude { get; set; }
+
+        [Column("geohash")]
+        public string Geohash { get; set; }
     }
 }

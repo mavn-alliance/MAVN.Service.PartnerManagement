@@ -1,4 +1,4 @@
-using System.Data.Common;
+﻿using System.Data.Common;
 using JetBrains.Annotations;
 using MAVN.Common.MsSql;
 using MAVN.Service.PartnerManagement.MsSqlRepositories.Entities;
@@ -60,6 +60,10 @@ namespace MAVN.Service.PartnerManagement.MsSqlRepositories
                 .ValueGeneratedNever()
                 .HasDefaultValue("000000")
                 .HasMaxLength(80);
+
+            modelBuilder.Entity<LocationEntity>()
+                .HasIndex(p => p.Geohash)
+                .IsUnique(false);
         }
     }
 }

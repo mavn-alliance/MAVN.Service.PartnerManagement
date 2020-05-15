@@ -1,9 +1,10 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Net;
 using System.Threading.Tasks;
 using AutoMapper;
 using Common.Log;
+using Geohash;
 using Lykke.Common.ApiLibrary.Exceptions;
 using Lykke.Common.Log;
 using MAVN.Service.Credentials.Client;
@@ -26,6 +27,7 @@ namespace MAVN.Service.PartnerManagement.DomainServices
         private readonly ICredentialsClient _credentialsClient;
         private readonly ICustomerProfileClient _customerProfileClient;
         private readonly IMapper _mapper;
+        private readonly Geohasher _geohasher;
         private readonly ILog _log;
 
         public PartnerService(
@@ -42,6 +44,7 @@ namespace MAVN.Service.PartnerManagement.DomainServices
             _customerProfileClient = customerProfileClient;
             _mapper = mapper;
             _log = logFactory.CreateLog(this);
+            _geohasher = new Geohasher();
         }
 
         public async Task<Guid> CreateAsync(Partner partner)
@@ -211,6 +214,17 @@ namespace MAVN.Service.PartnerManagement.DomainServices
 
             return await EnrichPartner(partner);
         }
+
+        public async Task<Guid[]> GetNearPartnerIdsByCoordinatesAndGeohashLevelAsync(short geohashLevel, double longitude, double latitude)
+        {
+            if(geohashLevel < 1 || geohashLevel > 9 || latitude < -90 || latitude > 90 || longitude < -180 || longitude > 80)
+                throw new ArgumentException("Invalid argument value for get near partners request");
+
+            var geohash = _geohasher.Encode(latitude, longitude, precision: geohashLevel);
+            var result = await _partnerRepository.GetPartnerIdsByGeohashAsync(geohash);
+            return result;
+        }
+
         private async Task<Partner> EnrichPartner(Partner partner)
         {
             if (partner == null)

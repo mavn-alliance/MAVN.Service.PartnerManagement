@@ -60,6 +60,24 @@ namespace MAVN.Service.PartnerManagement.Controllers
         }
 
         /// <summary>
+        /// Gets ids of partners which are close to passed longitude and latitude
+        /// </summary>
+        /// <param name="request">request parameters.</param>
+        /// <response code="200">A collection of partner ids.</response>
+        [HttpGet("byCoordinates")]
+        [ProducesResponseType(typeof(GetNearPartnersByCoordinatesResponse), (int)HttpStatusCode.OK)]
+        [ProducesResponseType((int)HttpStatusCode.BadRequest)]
+        public async Task<GetNearPartnersByCoordinatesResponse> GetNearPartnerByCoordinatesAsync([FromQuery] GetNearPartnersByCoordinatesRequest request)
+        {
+            var result = await _partnerService.GetNearPartnerIdsByCoordinatesAndGeohashLevelAsync(request.GeohashLevel, request.Longitude, request.Latitude);
+
+            return new GetNearPartnersByCoordinatesResponse
+            {
+                PartnersIds = result
+            };
+        }
+
+        /// <summary>
         /// Check if partner has ability to do something
         /// </summary>
         /// <param name="request">.</param>

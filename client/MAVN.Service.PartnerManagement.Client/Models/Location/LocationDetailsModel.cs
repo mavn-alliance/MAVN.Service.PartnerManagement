@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 
 namespace MAVN.Service.PartnerManagement.Client.Models.Location
 {
@@ -22,5 +22,10 @@ namespace MAVN.Service.PartnerManagement.Client.Models.Location
         /// The timestamp of the creation
         /// </summary>
         public DateTime CreatedAt { get; set; }
+
+        /// <summary>
+        /// Geohash of the location
+        /// </summary>
+        public string Geohash { get; set; }
     }
 }
