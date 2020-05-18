@@ -45,8 +45,8 @@ namespace MAVN.Service.PartnerManagement.Models.Validation.Location
                 .WithMessage("Latitude value must be between -90 and 90.");
 
             RuleFor(p => p.Longitude)
-                .InclusiveBetween(-180, 80)
-                .WithMessage("Longitude value must be between -180 and 80.");
+                .InclusiveBetween(-180, 180)
+                .WithMessage("Longitude value must be between -180 and 180.");
         }
     }
 }

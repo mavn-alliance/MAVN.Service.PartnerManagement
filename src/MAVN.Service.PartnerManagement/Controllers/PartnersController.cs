@@ -69,7 +69,7 @@ namespace MAVN.Service.PartnerManagement.Controllers
         [ProducesResponseType((int)HttpStatusCode.BadRequest)]
         public async Task<GetNearPartnersByCoordinatesResponse> GetNearPartnerByCoordinatesAsync([FromQuery] GetNearPartnersByCoordinatesRequest request)
         {
-            var result = await _partnerService.GetNearPartnerIdsByCoordinatesAndGeohashLevelAsync(request.GeohashLevel, request.Longitude, request.Latitude);
+            var result = await _partnerService.GetPartnerIdsInRadiusByCoordinatesAsync(request.RadiusInKm, request.Longitude, request.Latitude);
 
             return new GetNearPartnersByCoordinatesResponse
             {

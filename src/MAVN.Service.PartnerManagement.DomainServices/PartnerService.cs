@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
 using AutoMapper;
@@ -16,25 +17,28 @@ using MAVN.Service.PartnerManagement.Domain.Models;
 using MAVN.Service.PartnerManagement.Domain.Models.Dto;
 using MAVN.Service.PartnerManagement.Domain.Repositories;
 using MAVN.Service.PartnerManagement.Domain.Services;
+using MAVN.Service.PartnerManagement.DomainServices.Helpers;
 using MoreLinq;
 
 namespace MAVN.Service.PartnerManagement.DomainServices
 {
-    public class PartnerService: IPartnerService
+    public class PartnerService : IPartnerService
     {
         private readonly IPartnerRepository _partnerRepository;
         private readonly ILocationService _locationService;
         private readonly ICredentialsClient _credentialsClient;
         private readonly ICustomerProfileClient _customerProfileClient;
+        private readonly ILocationRepository _locationRepository;
         private readonly IMapper _mapper;
         private readonly Geohasher _geohasher = new Geohasher();
         private readonly ILog _log;
 
         public PartnerService(
-            IPartnerRepository partnerRepository, 
+            IPartnerRepository partnerRepository,
             ILocationService locationService,
             ICredentialsClient credentialsClient,
             ICustomerProfileClient customerProfileClient,
+            ILocationRepository locationRepository,
             IMapper mapper,
             ILogFactory logFactory)
         {
@@ -42,6 +46,7 @@ namespace MAVN.Service.PartnerManagement.DomainServices
             _locationService = locationService;
             _credentialsClient = credentialsClient;
             _customerProfileClient = customerProfileClient;
+            _locationRepository = locationRepository;
             _mapper = mapper;
             _log = logFactory.CreateLog(this);
         }
@@ -155,7 +160,7 @@ namespace MAVN.Service.PartnerManagement.DomainServices
                 partner.AmountInTokens = null;
                 partner.AmountInCurrency = null;
             }
-            
+
             partner.CreatedAt = existingPartner.CreatedAt;
             partner.CreatedBy = existingPartner.CreatedBy;
 
@@ -214,13 +219,22 @@ namespace MAVN.Service.PartnerManagement.DomainServices
             return await EnrichPartner(partner);
         }
 
-        public async Task<Guid[]> GetNearPartnerIdsByCoordinatesAndGeohashLevelAsync(short geohashLevel, double longitude, double latitude)
+        public async Task<Guid[]> GetPartnerIdsInRadiusByCoordinatesAsync(double radiusInKm, double longitude, double latitude)
         {
-            if(geohashLevel < 1 || geohashLevel > 9 || latitude < -90 || latitude > 90 || longitude < -180 || longitude > 80)
+            if (latitude < -90 || latitude > 90 || longitude < -180 || longitude > 180)
                 throw new ArgumentException("Invalid argument value for get near partners request");
 
+            var geohashLevel = DistanceHelper.GetGeohashLevelByRadius(radiusInKm);
             var geohash = _geohasher.Encode(latitude, longitude, precision: geohashLevel);
-            var result = await _partnerRepository.GetPartnerIdsByGeohashAsync(geohash);
+            var locations = await _locationRepository.GetLocationsByGeohashAsync(geohash);
+
+            var result = locations
+                .Where(l => DistanceHelper.GetDistanceInKmBetweenTwoPoints(latitude, longitude, l.Latitude.Value,
+                                l.Longitude.Value) <= radiusInKm)
+                .Select(l => l.PartnerId)
+                .Distinct()
+                .ToArray();
+
             return result;
         }
 

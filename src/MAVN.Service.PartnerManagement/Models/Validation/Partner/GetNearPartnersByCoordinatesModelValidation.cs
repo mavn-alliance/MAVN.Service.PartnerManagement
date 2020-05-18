@@ -12,12 +12,13 @@ namespace MAVN.Service.PartnerManagement.Models.Validation.Partner
                 .WithMessage("Latitude value must be between -90 and 90.");
 
             RuleFor(p => p.Longitude)
-                .InclusiveBetween(-180, 80)
-                .WithMessage("Longitude value must be between -180 and 80.");
+                .InclusiveBetween(-180, 180)
+                .WithMessage("Longitude value must be between -180 and 180.");
 
-            RuleFor(p => p.GeohashLevel)
-                .InclusiveBetween((short)1, (short)9)
-                .WithMessage("GeohashLevel value must be between 1 and 9.");
+            RuleFor(p => p.RadiusInKm)
+                .GreaterThan(0)
+                .LessThanOrEqualTo(100)
+                .WithMessage("RadiusInKm value must be between 1 and 100.");
         }
     }
 }
