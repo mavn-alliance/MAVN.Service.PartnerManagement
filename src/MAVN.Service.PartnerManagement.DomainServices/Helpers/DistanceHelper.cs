@@ -1,29 +1,22 @@
 ﻿using System;
 using MAVN.Service.PartnerManagement.Domain.Constants;
 
-namespace MAVN.Service.PartnerManagement.Domain.Helpers
+namespace MAVN.Service.PartnerManagement.DomainServices.Helpers
 {
     public static class DistanceHelper
     {
-        public static short GetGeohashLevelByRadius(int radiusInKm)
+        private const double PiDividedBy180 = 0.017453292519943295;
+
+        public static int GetGeohashLevelByRadius(double radiusInKm)
         {
             var diameterInKm = radiusInKm * 2;
+            var dict = GeohashLevelsSmallerSidesInKm.GeohashLevelsWithSmallerSidesInKm;
 
-            if (diameterInKm <= GeohashLevelsSmallerSidesInKm.Level5 &&
-                diameterInKm > GeohashLevelsSmallerSidesInKm.Level6)
-                return 5;
-
-            if (diameterInKm <= GeohashLevelsSmallerSidesInKm.Level4 &&
-                diameterInKm > GeohashLevelsSmallerSidesInKm.Level5)
-                return 4;
-
-            if (diameterInKm <= GeohashLevelsSmallerSidesInKm.Level3 &&
-                diameterInKm > GeohashLevelsSmallerSidesInKm.Level4)
-                return 3;
-
-            if (diameterInKm <= GeohashLevelsSmallerSidesInKm.Level2 &&
-                diameterInKm > GeohashLevelsSmallerSidesInKm.Level3)
-                return 2;
+            for (var i = dict.Count; i >= 1; i--)
+            {
+                if (dict[i-1] >= diameterInKm)
+                    return i;
+            }
 
             return 1;
         }
@@ -44,8 +37,6 @@ namespace MAVN.Service.PartnerManagement.Domain.Helpers
         }
 
         private static double ToRadians(double deg)
-        {
-            return deg * (Math.PI / 180);
-        }
+            => deg * PiDividedBy180;
     }
 }

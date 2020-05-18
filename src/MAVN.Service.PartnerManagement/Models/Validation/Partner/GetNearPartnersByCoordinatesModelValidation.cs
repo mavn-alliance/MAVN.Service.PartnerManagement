@@ -16,7 +16,8 @@ namespace MAVN.Service.PartnerManagement.Models.Validation.Partner
                 .WithMessage("Longitude value must be between -180 and 180.");
 
             RuleFor(p => p.RadiusInKm)
-                .InclusiveBetween(1, 100)
+                .GreaterThan(0)
+                .LessThanOrEqualTo(100)
                 .WithMessage("RadiusInKm value must be between 1 and 100.");
         }
     }

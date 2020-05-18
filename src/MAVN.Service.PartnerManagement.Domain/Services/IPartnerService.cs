@@ -17,7 +17,7 @@ namespace MAVN.Service.PartnerManagement.Domain.Services
         Task<Partner> GetByLocationIdAsync(Guid locationId);
         Task<IReadOnlyCollection<Partner>> GetByIdsAsync(IEnumerable<Guid> ids);
 
-        Task<Guid[]> GetPartnerIdsInRadiusByCoordinatesAsync(int radiusInKm, double longitude,
+        Task<Guid[]> GetPartnerIdsInRadiusByCoordinatesAsync(double radiusInKm, double longitude,
             double latitude);
     }
 }

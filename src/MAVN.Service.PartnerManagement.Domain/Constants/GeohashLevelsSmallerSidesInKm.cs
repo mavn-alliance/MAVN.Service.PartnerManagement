@@ -1,4 +1,6 @@
-﻿namespace MAVN.Service.PartnerManagement.Domain.Constants
+﻿using System.Collections.Generic;
+
+namespace MAVN.Service.PartnerManagement.Domain.Constants
 {
     /// <summary>
     /// Holds values of the smaller sized side of the geohash rectangle
@@ -6,12 +8,18 @@
     /// </summary>
     public class GeohashLevelsSmallerSidesInKm
     {
-        public const double Level1 = 5.004;
-        public const double Level2 = 625;
-        public const double Level3 = 156;
-        public const double Level4 = 19.5;
-        public const double Level5 = 4.9;
-        /// More levels could be added if needed
-        public const double Level6 = 0.61;
+        public static readonly Dictionary<int, double> GeohashLevelsWithSmallerSidesInKm =
+            new Dictionary<int, double>
+            {
+                {1, 5.004},
+                {2, 625},
+                {3, 156},
+                {4, 19.5},
+                {5, 4.9},
+                {6, 0.61},
+                {7, 0.1528},
+                {8, 0.0191},
+                {9, 0.00478},
+            };
     }
 }

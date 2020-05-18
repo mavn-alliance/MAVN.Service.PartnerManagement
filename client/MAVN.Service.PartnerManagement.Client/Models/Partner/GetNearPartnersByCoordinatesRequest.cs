@@ -17,6 +17,6 @@
         /// <summary>
         /// The radius you want to search in
         /// </summary>
-        public int RadiusInKm { get; set; }
+        public double RadiusInKm { get; set; }
     }
 }

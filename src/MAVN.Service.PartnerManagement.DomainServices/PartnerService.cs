@@ -12,13 +12,12 @@ using MAVN.Service.Credentials.Client;
 using MAVN.Service.Credentials.Client.Models.Requests;
 using MAVN.Service.Credentials.Client.Models.Responses;
 using MAVN.Service.CustomerProfile.Client;
-using MAVN.Service.PartnerManagement.Domain.Constants;
 using MAVN.Service.PartnerManagement.Domain.Exceptions;
-using MAVN.Service.PartnerManagement.Domain.Helpers;
 using MAVN.Service.PartnerManagement.Domain.Models;
 using MAVN.Service.PartnerManagement.Domain.Models.Dto;
 using MAVN.Service.PartnerManagement.Domain.Repositories;
 using MAVN.Service.PartnerManagement.Domain.Services;
+using MAVN.Service.PartnerManagement.DomainServices.Helpers;
 using MoreLinq;
 
 namespace MAVN.Service.PartnerManagement.DomainServices
@@ -217,7 +216,7 @@ namespace MAVN.Service.PartnerManagement.DomainServices
             return await EnrichPartner(partner);
         }
 
-        public async Task<Guid[]> GetPartnerIdsInRadiusByCoordinatesAsync(int radiusInKm, double longitude, double latitude)
+        public async Task<Guid[]> GetPartnerIdsInRadiusByCoordinatesAsync(double radiusInKm, double longitude, double latitude)
         {
             if (latitude < -90 || latitude > 90 || longitude < -180 || longitude > 180)
                 throw new ArgumentException("Invalid argument value for get near partners request");
