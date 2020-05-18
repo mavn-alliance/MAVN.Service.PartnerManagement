@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Lykke.Logs;
@@ -27,12 +27,14 @@ namespace MAVN.Service.PartnerManagement.Tests.DomainServices
             LocationServiceMock = new Mock<ILocationService>(MockBehavior.Strict);
             CredentialsClientMock = new Mock<ICredentialsClient>(MockBehavior.Strict);
             CustomerProfileClientMock = new Mock<ICustomerProfileClient>(MockBehavior.Strict);
+            LocationsRepositoryMock = new Mock<ILocationRepository>(MockBehavior.Strict);
 
             PartnerService = new PartnerService(
                 PartnerRepositoryMock.Object,
                 LocationServiceMock.Object,
                 CredentialsClientMock.Object,
                 CustomerProfileClientMock.Object,
+                LocationsRepositoryMock.Object,
                 mapper,
                 EmptyLogFactory.Instance);
 
@@ -94,6 +96,7 @@ namespace MAVN.Service.PartnerManagement.Tests.DomainServices
         public Mock<ILocationService> LocationServiceMock { get; set; }
 
         public Mock<IPartnerRepository> PartnerRepositoryMock { get; set; }
+        public Mock<ILocationRepository> LocationsRepositoryMock { get; set; }
 
         public (IReadOnlyCollection<Partner>, int) Partners { get; set; }
 
