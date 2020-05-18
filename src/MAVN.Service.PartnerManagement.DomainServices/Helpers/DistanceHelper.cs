@@ -10,11 +10,11 @@ namespace MAVN.Service.PartnerManagement.DomainServices.Helpers
         public static int GetGeohashLevelByRadius(double radiusInKm)
         {
             var diameterInKm = radiusInKm * 2;
-            var dict = GeohashLevelsSmallerSidesInKm.GeohashLevelsWithSmallerSidesInKm;
+            var geohashes = GeohashLevelsSmallerSidesInKm.GeohashLevelsWithSmallerSidesInKm;
 
-            for (var i = dict.Count; i >= 1; i--)
+            for (var i = geohashes.Count; i >= 1; i--)
             {
-                if (dict[i-1] >= diameterInKm)
+                if (geohashes[i-1] >= diameterInKm)
                     return i;
             }
 
