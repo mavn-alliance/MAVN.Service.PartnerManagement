@@ -17,6 +17,5 @@ namespace MAVN.Service.PartnerManagement.Domain.Repositories
         Task<Partner> GetByLocationIdAsync(Guid locationId);
 
         Task<IReadOnlyCollection<Partner>> GetByIdsAsync(IEnumerable<Guid> ids);
-        Task<IReadOnlyCollection<Partner>> GetPartnersByGeohashAsync(string geohash);
     }
 }

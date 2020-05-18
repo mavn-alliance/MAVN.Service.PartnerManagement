@@ -11,5 +11,6 @@ namespace MAVN.Service.PartnerManagement.Domain.Repositories
         Task<Location> GetByIdAsync(Guid id);
         Task<Location> GetByExternalIdAsync(string externalId);
         Task<bool> AreExternalIdsNotUniqueAsync(Guid partnerId, IEnumerable<string> externalIds);
+        Task<IReadOnlyCollection<Location>> GetLocationsByGeohashAsync(string geohash);
     }
 }

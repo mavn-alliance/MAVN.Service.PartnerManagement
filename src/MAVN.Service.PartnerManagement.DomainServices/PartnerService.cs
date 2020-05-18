@@ -28,6 +28,7 @@ namespace MAVN.Service.PartnerManagement.DomainServices
         private readonly ILocationService _locationService;
         private readonly ICredentialsClient _credentialsClient;
         private readonly ICustomerProfileClient _customerProfileClient;
+        private readonly ILocationRepository _locationRepository;
         private readonly IMapper _mapper;
         private readonly Geohasher _geohasher = new Geohasher();
         private readonly ILog _log;
@@ -37,6 +38,7 @@ namespace MAVN.Service.PartnerManagement.DomainServices
             ILocationService locationService,
             ICredentialsClient credentialsClient,
             ICustomerProfileClient customerProfileClient,
+            ILocationRepository locationRepository,
             IMapper mapper,
             ILogFactory logFactory)
         {
@@ -44,6 +46,7 @@ namespace MAVN.Service.PartnerManagement.DomainServices
             _locationService = locationService;
             _credentialsClient = credentialsClient;
             _customerProfileClient = customerProfileClient;
+            _locationRepository = locationRepository;
             _mapper = mapper;
             _log = logFactory.CreateLog(this);
         }
@@ -223,13 +226,13 @@ namespace MAVN.Service.PartnerManagement.DomainServices
 
             var geohashLevel = DistanceHelper.GetGeohashLevelByRadius(radiusInKm);
             var geohash = _geohasher.Encode(latitude, longitude, precision: geohashLevel);
-            var partners = await _partnerRepository.GetPartnersByGeohashAsync(geohash);
+            var locations = await _locationRepository.GetLocationsByGeohashAsync(geohash);
 
-            var result = partners
-                .Where(p => p.Locations.Any(l =>
-                    DistanceHelper.GetDistanceInKmBetweenTwoPoints(latitude, longitude, l.Latitude.Value, l.Longitude.Value) <=
-                    radiusInKm))
-                .Select(p => p.Id)
+            var result = locations
+                .Where(l => DistanceHelper.GetDistanceInKmBetweenTwoPoints(latitude, longitude, l.Latitude.Value,
+                                l.Longitude.Value) <= radiusInKm)
+                .Select(l => l.PartnerId)
+                .Distinct()
                 .ToArray();
 
             return result;

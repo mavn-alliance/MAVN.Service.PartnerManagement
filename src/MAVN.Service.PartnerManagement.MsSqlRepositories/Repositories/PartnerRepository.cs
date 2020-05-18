@@ -191,18 +191,5 @@ namespace MAVN.Service.PartnerManagement.MsSqlRepositories.Repositories
                 return _mapper.Map<IReadOnlyCollection<Partner>>(partners);
             }
         }
-
-        public async Task<IReadOnlyCollection<Partner>> GetPartnersByGeohashAsync(string geohash)
-        {
-            using (var context = _msSqlContextFactory.CreateDataContext())
-            {
-                var partners = await context.Partners
-                    .Include(p => p.Locations)
-                    .Where(p => p.Locations.Any(l => l.Geohash.StartsWith(geohash)))
-                    .ToArrayAsync();
-
-                return _mapper.Map<IReadOnlyCollection<Partner>>(partners);
-            }
-        }
     }
 }
