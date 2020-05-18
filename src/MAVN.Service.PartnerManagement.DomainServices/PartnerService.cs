@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
 using AutoMapper;
@@ -11,7 +12,9 @@ using MAVN.Service.Credentials.Client;
 using MAVN.Service.Credentials.Client.Models.Requests;
 using MAVN.Service.Credentials.Client.Models.Responses;
 using MAVN.Service.CustomerProfile.Client;
+using MAVN.Service.PartnerManagement.Domain.Constants;
 using MAVN.Service.PartnerManagement.Domain.Exceptions;
+using MAVN.Service.PartnerManagement.Domain.Helpers;
 using MAVN.Service.PartnerManagement.Domain.Models;
 using MAVN.Service.PartnerManagement.Domain.Models.Dto;
 using MAVN.Service.PartnerManagement.Domain.Repositories;
@@ -20,7 +23,7 @@ using MoreLinq;
 
 namespace MAVN.Service.PartnerManagement.DomainServices
 {
-    public class PartnerService: IPartnerService
+    public class PartnerService : IPartnerService
     {
         private readonly IPartnerRepository _partnerRepository;
         private readonly ILocationService _locationService;
@@ -31,7 +34,7 @@ namespace MAVN.Service.PartnerManagement.DomainServices
         private readonly ILog _log;
 
         public PartnerService(
-            IPartnerRepository partnerRepository, 
+            IPartnerRepository partnerRepository,
             ILocationService locationService,
             ICredentialsClient credentialsClient,
             ICustomerProfileClient customerProfileClient,
@@ -155,7 +158,7 @@ namespace MAVN.Service.PartnerManagement.DomainServices
                 partner.AmountInTokens = null;
                 partner.AmountInCurrency = null;
             }
-            
+
             partner.CreatedAt = existingPartner.CreatedAt;
             partner.CreatedBy = existingPartner.CreatedBy;
 
@@ -214,13 +217,22 @@ namespace MAVN.Service.PartnerManagement.DomainServices
             return await EnrichPartner(partner);
         }
 
-        public async Task<Guid[]> GetNearPartnerIdsByCoordinatesAndGeohashLevelAsync(short geohashLevel, double longitude, double latitude)
+        public async Task<Guid[]> GetPartnerIdsInRadiusByCoordinatesAsync(int radiusInKm, double longitude, double latitude)
         {
-            if(geohashLevel < 1 || geohashLevel > 9 || latitude < -90 || latitude > 90 || longitude < -180 || longitude > 80)
+            if (latitude < -90 || latitude > 90 || longitude < -180 || longitude > 180)
                 throw new ArgumentException("Invalid argument value for get near partners request");
 
+            var geohashLevel = DistanceHelper.GetGeohashLevelByRadius(radiusInKm);
             var geohash = _geohasher.Encode(latitude, longitude, precision: geohashLevel);
-            var result = await _partnerRepository.GetPartnerIdsByGeohashAsync(geohash);
+            var partners = await _partnerRepository.GetPartnersByGeohashAsync(geohash);
+
+            var result = partners
+                .Where(p => p.Locations.Any(l =>
+                    DistanceHelper.GetDistanceInKmBetweenTwoPoints(latitude, longitude, l.Latitude.Value, l.Longitude.Value) <=
+                    radiusInKm))
+                .Select(p => p.Id)
+                .ToArray();
+
             return result;
         }
 

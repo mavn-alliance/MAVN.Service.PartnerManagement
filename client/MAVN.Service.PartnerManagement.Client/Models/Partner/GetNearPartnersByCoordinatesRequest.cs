@@ -15,8 +15,8 @@
         public double Longitude { get; set; }
 
         /// <summary>
-        /// The geohash level used for the search 
+        /// The radius you want to search in
         /// </summary>
-        public short GeohashLevel { get; set; } = 5;
+        public int RadiusInKm { get; set; }
     }
 }
