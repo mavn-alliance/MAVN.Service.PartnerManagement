@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <TargetFramework>netcoreapp2.2</TargetFramework>
     <OutputType>Exe</OutputType>
@@ -13,6 +13,9 @@
     <LangVersion>latest</LangVersion>
   </PropertyGroup>
   <ItemGroup>
+    <None Update="appsettings.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Update="Dockerfile">
       <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
     </None>
@@ -20,12 +23,14 @@
   <ItemGroup>
     <PackageReference Include="AutoMapper" Version="9.0.0" />
     <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="7.0.0" />
+    <PackageReference Include="Lykke.RabbitMqBroker" Version="7.13.2" />
     <PackageReference Include="Lykke.Sdk" Version="5.17.0" />
     <PackageReference Include="Microsoft.AspNetCore" Version="2.2.0" />
     <PackageReference Include="Microsoft.AspNetCore.StaticFiles" Version="2.2.0" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\client\MAVN.Service.PartnerManagement.Client\MAVN.Service.PartnerManagement.Client.csproj" />
+    <ProjectReference Include="..\..\contract\MAVN.Service.PartnerManagement.Contract\MAVN.Service.PartnerManagement.Contract.csproj" />
     <ProjectReference Include="..\MAVN.Service.PartnerManagement.Domain\MAVN.Service.PartnerManagement.Domain.csproj" />
     <ProjectReference Include="..\MAVN.Service.PartnerManagement.DomainServices\MAVN.Service.PartnerManagement.DomainServices.csproj" />
     <ProjectReference Include="..\MAVN.Service.PartnerManagement.MsSqlRepositories\MAVN.Service.PartnerManagement.MsSqlRepositories.csproj" />

@@ -1,9 +1,10 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using MAVN.Service.Credentials.Client;
 using MAVN.Service.Credentials.Client.Models.Requests;
 using MAVN.Service.Credentials.Client.Models.Responses;
+using MAVN.Service.PartnerManagement.Contract;
 using MAVN.Service.PartnerManagement.Domain.Exceptions;
 using MAVN.Service.PartnerManagement.Domain.Models;
 using MAVN.Service.PartnerManagement.Domain.Models.Dto;
@@ -217,6 +218,8 @@ namespace MAVN.Service.PartnerManagement.Tests.DomainServices
             fixture.CredentialsClientMock
                 .Verify(p => p.Partners.CreateAsync(It.Is<PartnerCredentialsCreateRequest>(c => 
                         c.ClientId == partner.ClientId && c.ClientSecret == partner.ClientSecret)));
+
+            fixture.PartnerCreatedPublisherMock.Verify(x => x.PublishAsync(It.IsAny<PartnerCreatedEvent>()));
         }
 
         [Fact]

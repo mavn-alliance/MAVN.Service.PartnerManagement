@@ -2,11 +2,13 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Lykke.Logs;
+using Lykke.RabbitMqBroker.Publisher;
 using MAVN.Service.Credentials.Client;
 using MAVN.Service.Credentials.Client.Models.Requests;
 using MAVN.Service.Credentials.Client.Models.Responses;
 using MAVN.Service.CustomerProfile.Client;
 using MAVN.Service.CustomerProfile.Client.Models.Responses;
+using MAVN.Service.PartnerManagement.Contract;
 using MAVN.Service.PartnerManagement.Domain.Models;
 using MAVN.Service.PartnerManagement.Domain.Models.Dto;
 using MAVN.Service.PartnerManagement.Domain.Repositories;
@@ -28,6 +30,7 @@ namespace MAVN.Service.PartnerManagement.Tests.DomainServices
             CredentialsClientMock = new Mock<ICredentialsClient>(MockBehavior.Strict);
             CustomerProfileClientMock = new Mock<ICustomerProfileClient>(MockBehavior.Strict);
             LocationsRepositoryMock = new Mock<ILocationRepository>(MockBehavior.Strict);
+            PartnerCreatedPublisherMock = new Mock<IRabbitPublisher<PartnerCreatedEvent>>(MockBehavior.Strict);
 
             PartnerService = new PartnerService(
                 PartnerRepositoryMock.Object,
@@ -35,6 +38,7 @@ namespace MAVN.Service.PartnerManagement.Tests.DomainServices
                 CredentialsClientMock.Object,
                 CustomerProfileClientMock.Object,
                 LocationsRepositoryMock.Object,
+                PartnerCreatedPublisherMock.Object,
                 mapper,
                 EmptyLogFactory.Instance);
 
@@ -88,16 +92,12 @@ namespace MAVN.Service.PartnerManagement.Tests.DomainServices
         }
 
         public PartnerService PartnerService { get; set; }
-
         public Mock<ICustomerProfileClient> CustomerProfileClientMock { get; set; }
-
         public Mock<ICredentialsClient> CredentialsClientMock { get; set; }
-
         public Mock<ILocationService> LocationServiceMock { get; set; }
-
         public Mock<IPartnerRepository> PartnerRepositoryMock { get; set; }
         public Mock<ILocationRepository> LocationsRepositoryMock { get; set; }
-
+        public Mock<IRabbitPublisher<PartnerCreatedEvent>> PartnerCreatedPublisherMock { get; set; }
         public (IReadOnlyCollection<Partner>, int) Partners { get; set; }
 
         public Guid LocationId { get; set; }
@@ -162,6 +162,10 @@ namespace MAVN.Service.PartnerManagement.Tests.DomainServices
 
             CredentialsClientMock.Setup(m => m.Partners.CreateAsync(It.IsAny<PartnerCredentialsCreateRequest>()))
                 .ReturnsAsync(() => CredentialsCreateResponse);
+
+            PartnerCreatedPublisherMock.Setup(x => x.PublishAsync(It.IsAny<PartnerCreatedEvent>()))
+                .Returns(Task.CompletedTask)
+                .Verifiable();
 
             return this;
         }
