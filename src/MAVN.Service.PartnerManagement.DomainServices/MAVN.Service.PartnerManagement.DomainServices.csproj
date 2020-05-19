@@ -6,12 +6,14 @@
   <ItemGroup>
     <PackageReference Include="AutoMapper" Version="9.0.0" />
     <PackageReference Include="geohash-dotnet" Version="1.0.4" />
+    <PackageReference Include="Lykke.RabbitMqBroker" Version="7.13.2" />
     <PackageReference Include="MAVN.Service.Credentials.Client" Version="1.0.1" />
     <PackageReference Include="MAVN.Service.CustomerProfile.Client" Version="1.2.0" />
     <PackageReference Include="MAVN.Service.PaymentManagement.Client" Version="1.13.4" />
     <PackageReference Include="MAVN.Service.Sessions.Client" Version="1.0.1" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\contract\MAVN.Service.PartnerManagement.Contract\MAVN.Service.PartnerManagement.Contract.csproj" />
     <ProjectReference Include="..\MAVN.Service.PartnerManagement.Domain\MAVN.Service.PartnerManagement.Domain.csproj" />
   </ItemGroup>
 </Project>

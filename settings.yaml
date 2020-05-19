@@ -21,7 +21,11 @@ SlackNotifications:
                 - AzureTableStorage
         QueueName:
             settings-key: SlackQueueName
-
+    RabbitMq:
+        RabbitMqConnectionString:
+            settings-key: UserManagementRabbitMQ
+            types:
+              - RabbitMq
 SessionsServiceClient:
   ServiceUrl:
     settings-key: AdminSessionsServiceUrl

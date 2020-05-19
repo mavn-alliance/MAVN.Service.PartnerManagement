@@ -8,10 +8,12 @@ using Common.Log;
 using Geohash;
 using Lykke.Common.ApiLibrary.Exceptions;
 using Lykke.Common.Log;
+using Lykke.RabbitMqBroker.Publisher;
 using MAVN.Service.Credentials.Client;
 using MAVN.Service.Credentials.Client.Models.Requests;
 using MAVN.Service.Credentials.Client.Models.Responses;
 using MAVN.Service.CustomerProfile.Client;
+using MAVN.Service.PartnerManagement.Contract;
 using MAVN.Service.PartnerManagement.Domain.Exceptions;
 using MAVN.Service.PartnerManagement.Domain.Models;
 using MAVN.Service.PartnerManagement.Domain.Models.Dto;
@@ -29,6 +31,7 @@ namespace MAVN.Service.PartnerManagement.DomainServices
         private readonly ICredentialsClient _credentialsClient;
         private readonly ICustomerProfileClient _customerProfileClient;
         private readonly ILocationRepository _locationRepository;
+        private readonly IRabbitPublisher<PartnerCreatedEvent> _partnerCreatedPublisher;
         private readonly IMapper _mapper;
         private readonly Geohasher _geohasher = new Geohasher();
         private readonly ILog _log;
@@ -39,6 +42,7 @@ namespace MAVN.Service.PartnerManagement.DomainServices
             ICredentialsClient credentialsClient,
             ICustomerProfileClient customerProfileClient,
             ILocationRepository locationRepository,
+            IRabbitPublisher<PartnerCreatedEvent> partnerCreatedPublisher,
             IMapper mapper,
             ILogFactory logFactory)
         {
@@ -47,6 +51,7 @@ namespace MAVN.Service.PartnerManagement.DomainServices
             _credentialsClient = credentialsClient;
             _customerProfileClient = customerProfileClient;
             _locationRepository = locationRepository;
+            _partnerCreatedPublisher = partnerCreatedPublisher;
             _mapper = mapper;
             _log = logFactory.CreateLog(this);
         }
@@ -99,6 +104,11 @@ namespace MAVN.Service.PartnerManagement.DomainServices
             }
 
             var createdPartner = await _partnerRepository.CreateAsync(partner);
+
+            await _partnerCreatedPublisher.PublishAsync(new PartnerCreatedEvent
+            {
+                CreatedBy = createdPartner.CreatedBy, PartnerId = createdPartner.Id, Timestamp = DateTime.UtcNow
+            });
 
             return createdPartner.Id;
         }

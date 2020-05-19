@@ -1,4 +1,4 @@
-using JetBrains.Annotations;
+﻿using JetBrains.Annotations;
 using Lykke.SettingsReader.Attributes;
 
 namespace MAVN.Service.PartnerManagement.Settings
@@ -9,5 +9,7 @@ namespace MAVN.Service.PartnerManagement.Settings
         public DbSettings Db { get; set; }
 
         public AuthenticationSettings Authentication { get; set; }
+
+        public RabbitMqSettings RabbitMq { get; set; }
     }
 }
