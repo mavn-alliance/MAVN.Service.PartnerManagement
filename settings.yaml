@@ -13,6 +13,11 @@ PartnerManagementService:
             settings-key: PartnerManagementService-GeneratedPasswordLength
         SessionsServiceTokenTimeToLiveInSeconds:
             settings-key: PartnerManagementService-SessionsServiceTokenTimeToLiveInSeconds
+    RabbitMq:
+        RabbitMqConnectionString:
+            settings-key: UserManagementRabbitMQ
+            types:
+              - RabbitMq
 SlackNotifications:
     AzureQueue:
         ConnectionString:
@@ -21,11 +26,6 @@ SlackNotifications:
                 - AzureTableStorage
         QueueName:
             settings-key: SlackQueueName
-    RabbitMq:
-        RabbitMqConnectionString:
-            settings-key: UserManagementRabbitMQ
-            types:
-              - RabbitMq
 SessionsServiceClient:
   ServiceUrl:
     settings-key: AdminSessionsServiceUrl
