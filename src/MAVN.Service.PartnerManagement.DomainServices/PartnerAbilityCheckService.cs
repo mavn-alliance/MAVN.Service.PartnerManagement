@@ -33,7 +33,7 @@ namespace MAVN.Service.PartnerManagement.DomainServices
                     if (paymentIntegrationResponse != CheckPaymentIntegrationErrorCode.None)
                         return PartnerInabilityErrorCodes.InvalidPaymentIntegrationDetails;
 
-                    var kycStatus = await _kycClient.Api.GetCurrentByPartnerIdAsync(partnerId);
+                    var kycStatus = await _kycClient.KycApi.GetCurrentByPartnerIdAsync(partnerId);
                     if (kycStatus == null || kycStatus.KycStatus != KycStatus.Accepted)
                         return PartnerInabilityErrorCodes.KycNotPassed;
                     break;
