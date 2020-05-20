@@ -5,6 +5,7 @@ using MAVN.Service.CustomerProfile.Client;
 using MAVN.Service.PartnerManagement.Settings;
 using MAVN.Service.Sessions.Client;
 using Lykke.SettingsReader;
+using MAVN.Service.Kyc.Client;
 using MAVN.Service.PaymentManagement.Client;
 using MAVN.Service.Referral.Client;
 
@@ -35,6 +36,8 @@ namespace MAVN.Service.PartnerManagement.Modules
             builder.RegisterSessionsServiceClient(_appSettings.CurrentValue.SessionsServiceClient);
 
             builder.RegisterReferralClient(_appSettings.CurrentValue.ReferralServiceClient, null);
+
+            builder.RegisterKycClient(_appSettings.CurrentValue.KycServiceClient, null);
         }
     }
 }

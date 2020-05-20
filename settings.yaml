@@ -55,6 +55,10 @@ ReferralServiceClient:
     ServiceUrl:
         settings-key: ReferralServiceUrl
 
+KycServiceClient:
+    ServiceUrl:
+        settings-key: KycServiceUrl
+
 MonitoringServiceClient:
     MonitoringServiceUrl:
         settings-key: MonitoringServiceUrl

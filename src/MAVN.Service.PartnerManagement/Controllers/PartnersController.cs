@@ -11,11 +11,13 @@ using MAVN.Service.PartnerManagement.Client.Models.Partner;
 using MAVN.Service.PartnerManagement.Domain.Exceptions;
 using MAVN.Service.PartnerManagement.Domain.Models;
 using MAVN.Service.PartnerManagement.Domain.Models.Dto;
+using MAVN.Service.PartnerManagement.Domain.Models.Enums;
 using MAVN.Service.PartnerManagement.Domain.Services;
 using MAVN.Service.PaymentManagement.Client;
 using MAVN.Service.PaymentManagement.Client.Models.Requests;
 using MAVN.Service.PaymentManagement.Client.Models.Responses;
 using Microsoft.AspNetCore.Mvc;
+using PartnerInabilityErrorCodes = MAVN.Service.PartnerManagement.Domain.Models.Enums.PartnerInabilityErrorCodes;
 
 namespace MAVN.Service.PartnerManagement.Controllers
 {
@@ -24,18 +26,18 @@ namespace MAVN.Service.PartnerManagement.Controllers
     public class PartnersController : Controller, IPartnersApi
     {
         private readonly IPartnerService _partnerService;
-        private readonly IPaymentManagementClient _paymentManagementClient;
+        private readonly IPartnerAbilityCheckService _partnerAbilityCheckService;
         private readonly IMapper _mapper;
         private readonly ILog _log;
 
         public PartnersController(
             IPartnerService partnerService,
-            IPaymentManagementClient paymentManagementClient,
+            IPartnerAbilityCheckService partnerAbilityCheckService,
             IMapper mapper,
             ILogFactory logFactory)
         {
             _partnerService = partnerService;
-            _paymentManagementClient = paymentManagementClient;
+            _partnerAbilityCheckService = partnerAbilityCheckService;
             _mapper = mapper;
             _log = logFactory.CreateLog(this);
         }
@@ -86,22 +88,15 @@ namespace MAVN.Service.PartnerManagement.Controllers
         [ProducesResponseType(typeof(CheckAbilityResponse), (int)HttpStatusCode.OK)]
         public async Task<CheckAbilityResponse> CheckAbilityAsync([FromQuery] CheckAbilityRequest request)
         {
-            switch (request.PartnerAbility.Value)
+            var result =
+                await _partnerAbilityCheckService.CheckPartnerAbility((Domain.Models.Enums.PartnerAbility) request.PartnerAbility.Value,
+                    request.PartnerId);
+
+            return new CheckAbilityResponse
             {
-                case PartnerAbility.PublishSmartVoucherCampaign:
-                    var result =
-                        await _paymentManagementClient.Api.CheckPaymentIntegrationAsync(
-                            new PaymentIntegrationCheckRequest { PartnerId = request.PartnerId });
-                    return new CheckAbilityResponse
-                    {
-                        HasAbility = result == CheckPaymentIntegrationErrorCode.None,
-                        ErrorCode = result != CheckPaymentIntegrationErrorCode.None
-                            ? PartnerInabilityErrorCodes.InvalidPaymentIntegrationDetails
-                            : PartnerInabilityErrorCodes.None
-                    };
-                default:
-                    throw new ArgumentOutOfRangeException();
-            }
+                HasAbility = result == PartnerInabilityErrorCodes.None,
+                ErrorCode = (Client.Enums.PartnerInabilityErrorCodes)result
+            };
         }
 
         /// <summary>
