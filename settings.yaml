@@ -20,9 +20,9 @@ PartnerManagementService:
               - RabbitMq
     Geocoding:
         ApiKey:
-            settings-key:PartnerManagementService-GeocodingApiKey
+            settings-key: PartnerManagementService-GeocodingApiKey
         Url:
-            settings-key:PartnerManagementService-GeocodingUrl
+            settings-key: PartnerManagementService-GeocodingUrl
 SlackNotifications:
     AzureQueue:
         ConnectionString:
