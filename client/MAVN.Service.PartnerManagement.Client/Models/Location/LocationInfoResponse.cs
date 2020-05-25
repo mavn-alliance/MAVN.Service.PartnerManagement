@@ -46,5 +46,10 @@ namespace MAVN.Service.PartnerManagement.Client.Models.Location
         /// Latitude of the location
         /// </summary>
         public double? Latitude { get; set; }
+
+        /// <summary>
+        /// Country Iso3 code
+        /// </summary>
+        public string CountryIso3Code { get; set; }
     }
 }

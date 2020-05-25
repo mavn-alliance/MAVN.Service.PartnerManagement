@@ -27,5 +27,7 @@ namespace MAVN.Service.PartnerManagement.Domain.Models
         public double? Latitude { get; set; }
 
         public string Geohash { get; set; }
+
+        public string CountryIso3Code { get; set; }
     }
 }
