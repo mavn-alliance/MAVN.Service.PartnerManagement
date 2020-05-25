@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using AutoMapper;
 using JetBrains.Annotations;
 using Lykke.Sdk;
@@ -15,7 +15,8 @@ namespace MAVN.Service.PartnerManagement
     {
         private readonly LykkeSwaggerOptions _swaggerOptions = new LykkeSwaggerOptions
         {
-            ApiTitle = "PartnerManagement API", ApiVersion = "v1"
+            ApiTitle = "PartnerManagement API",
+            ApiVersion = "v1"
         };
 
         [UsedImplicitly]
@@ -26,6 +27,7 @@ namespace MAVN.Service.PartnerManagement
                 options.Extend = (sc, st) =>
                 {
                     sc.AddAutoMapper(typeof(ServiceProfile), typeof(AutoMapperProfile));
+                    sc.AddHttpClient();
                 };
 
                 options.SwaggerOptions = _swaggerOptions;
