@@ -33,5 +33,8 @@ namespace MAVN.Service.PartnerManagement.MsSqlRepositories.Entities
 
         [Column("geohash")]
         public string Geohash { get; set; }
+
+        [Column("сountry_iso3_code")]
+        public string CountryIso3Code { get; set; }
     }
 }

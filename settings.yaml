@@ -18,6 +18,11 @@ PartnerManagementService:
             settings-key: UserManagementRabbitMQ
             types:
               - RabbitMq
+    Geocoding:
+        ApiKey:
+            settings-key:PartnerManagementService-GeocodingApiKey
+        Url:
+            settings-key:PartnerManagementService-GeocodingUrl
 SlackNotifications:
     AzureQueue:
         ConnectionString:
@@ -49,4 +54,6 @@ PaymentManagementServiceClient:
 MonitoringServiceClient:
     MonitoringServiceUrl:
         settings-key: MonitoringServiceUrl
+
+
 

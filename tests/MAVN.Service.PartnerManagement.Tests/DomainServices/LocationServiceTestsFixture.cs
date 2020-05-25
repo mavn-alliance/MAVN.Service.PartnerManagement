@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Lykke.Logs;
@@ -8,6 +8,7 @@ using MAVN.Service.CustomerProfile.Client.Models.Requests;
 using MAVN.Service.CustomerProfile.Client.Models.Responses;
 using MAVN.Service.PartnerManagement.Domain.Models;
 using MAVN.Service.PartnerManagement.Domain.Repositories;
+using MAVN.Service.PartnerManagement.Domain.Services;
 using MAVN.Service.PartnerManagement.DomainServices;
 using Moq;
 using Vertical = MAVN.Service.PartnerManagement.Domain.Models.Vertical;
@@ -22,11 +23,13 @@ namespace MAVN.Service.PartnerManagement.Tests.DomainServices
 
             CustomerProfileClientMock = new Mock<ICustomerProfileClient>(MockBehavior.Strict);
             LocationRepositoryMock = new Mock<ILocationRepository>();
+            GeocodingReaderMock = new Mock<IGeocodingReader>();
 
             LocationService = new LocationService(
                 CustomerProfileClientMock.Object,
                 EmptyLogFactory.Instance,
-                LocationRepositoryMock.Object);
+                LocationRepositoryMock.Object,
+                GeocodingReaderMock.Object);
 
             Partner = new Partner
             {
@@ -125,6 +128,7 @@ namespace MAVN.Service.PartnerManagement.Tests.DomainServices
         public Mock<ICustomerProfileClient> CustomerProfileClientMock { get; set; }
 
         public Mock<ILocationRepository> LocationRepositoryMock { get; set; }
+        public Mock<IGeocodingReader> GeocodingReaderMock { get; set; }
 
         public (IReadOnlyCollection<Partner>, int) Partners { get; set; }
 

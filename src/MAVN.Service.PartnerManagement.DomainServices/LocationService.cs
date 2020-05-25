@@ -20,6 +20,7 @@ namespace MAVN.Service.PartnerManagement.DomainServices
     public class LocationService : ILocationService
     {
         private readonly ICustomerProfileClient _customerProfileClient;
+        private readonly IGeocodingReader _geocodingReader;
         private readonly ILocationRepository _locationRepository;
         private readonly Geohasher _geohasher = new Geohasher();
         private readonly ILog _log;
@@ -27,9 +28,11 @@ namespace MAVN.Service.PartnerManagement.DomainServices
         public LocationService(
             ICustomerProfileClient customerProfileClient,
             ILogFactory logFactory,
-            ILocationRepository locationRepository)
+            ILocationRepository locationRepository,
+            IGeocodingReader geocodingReader)
         {
             _customerProfileClient = customerProfileClient;
+            _geocodingReader = geocodingReader;
             _locationRepository = locationRepository;
             _log = logFactory.CreateLog(this);
         }
@@ -56,11 +59,12 @@ namespace MAVN.Service.PartnerManagement.DomainServices
             }
 
             // We don't want 3 created by on the request side of things so we are setting it here
-            partner.Locations.ForEach(location =>
+            partner.Locations.ForEach(async location =>
             {
                 location.Id = Guid.NewGuid();
                 location.CreatedBy = partner.CreatedBy;
                 SetGeohash(location);
+                await SetCountryIso3Code(location);
 
                 _log.Info("Location creating", context: $"location: {location.ToJson()}");
 
@@ -120,12 +124,13 @@ namespace MAVN.Service.PartnerManagement.DomainServices
 
             if (updatedLocations.Any())
             {
-                updatedLocations.ForEach(location =>
+                updatedLocations.ForEach(async location =>
                 {
                     var existingLocation = existingLocations.First(p => p.Id == location.Id);
                     location.CreatedBy = existingLocation.CreatedBy;
                     location.CreatedAt = existingLocation.CreatedAt;
                     SetGeohash(location);
+                    await SetCountryIso3Code(location);
 
                     _log.Info("Location updating", context: $"location: {location.ToJson()}");
 
@@ -135,11 +140,12 @@ namespace MAVN.Service.PartnerManagement.DomainServices
 
             if (createdLocations.Any())
             {
-                createdLocations.ForEach(location =>
+                createdLocations.ForEach(async location =>
                 {
                     location.Id = Guid.NewGuid();
                     location.CreatedBy = partner.CreatedBy;
                     SetGeohash(location);
+                    await SetCountryIso3Code(location);
 
                     _log.Info("Location creating", context: $"location: {location.ToJson()}");
 
@@ -178,10 +184,21 @@ namespace MAVN.Service.PartnerManagement.DomainServices
 
         private void SetGeohash(Location location)
         {
-            if (location.Latitude.HasValue && location.Longitude.HasValue)
-                location.Geohash = _geohasher.Encode(location.Latitude.Value, location.Longitude.Value, precision: 9);
-            else
-                location.Geohash = null;
+            location.Geohash = IsCoordinatesDetermined(location)
+                ? _geohasher.Encode(location.Latitude.Value, location.Longitude.Value, precision: 9)
+                : null;
+        }
+
+        private async Task SetCountryIso3Code(Location location)
+        {
+            location.CountryIso3Code = IsCoordinatesDetermined(location)
+                ? await _geocodingReader.GetCountryIso3CodeByCoordinateAsync(location.Latitude.Value, location.Longitude.Value)
+                : null;
+        }
+
+        private bool IsCoordinatesDetermined(Location location)
+        {
+            return location?.Latitude != null && location?.Longitude != null;
         }
 
         private async Task<(PartnerContactErrorCodes, Location)> UpdatePartnerContact(Location location)

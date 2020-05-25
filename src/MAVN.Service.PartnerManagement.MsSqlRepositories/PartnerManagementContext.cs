@@ -64,6 +64,10 @@ namespace MAVN.Service.PartnerManagement.MsSqlRepositories
             modelBuilder.Entity<LocationEntity>()
                 .HasIndex(p => p.Geohash)
                 .IsUnique(false);
+
+            modelBuilder.Entity<LocationEntity>()
+                .HasIndex(l => l.CountryIso3Code)
+                .IsUnique(false);
         }
     }
 }
