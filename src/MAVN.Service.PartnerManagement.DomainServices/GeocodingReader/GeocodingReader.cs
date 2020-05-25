@@ -4,11 +4,12 @@ using Common;
 using Common.Log;
 using Lykke.Common.Log;
 using MAVN.Service.PartnerManagement.Domain.Services;
+using MAVN.Service.PartnerManagement.DomainServices.GeocodingReader.Enums;
 using MAVN.Service.PartnerManagement.DomainServices.GeocodingReader.Responses;
 using Newtonsoft.Json;
+using AddressTypes = MAVN.Service.PartnerManagement.DomainServices.GeocodingReader.Enums.AddressTypes;
 
 namespace MAVN.Service.PartnerManagement.DomainServices.GeocodingReader
-
 {
     public class GeocodingReader : IGeocodingReader
     {
