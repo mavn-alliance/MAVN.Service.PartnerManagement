@@ -24,6 +24,8 @@ namespace MAVN.Service.PartnerManagement.DomainServices
 
         public async Task<string> GetCountryDataByCoordinateAsync(double latitude, double longitude)
         {
+            AssertCoordinatesRange(latitude, longitude);
+
             var requestUrl = $"{_url}?latlng={ToDotString(latitude)},{ToDotString(longitude)}&location_type=APPROXIMATE&result_type=country&key={_apiKey}";
             var response = await _httpClient.GetAsync(new Uri(requestUrl));
             response.EnsureSuccessStatusCode();
@@ -35,5 +37,19 @@ namespace MAVN.Service.PartnerManagement.DomainServices
             => value
                 .ToString(NumberFormatInfo.InvariantInfo)
                 .Trim();
+
+        private void AssertCoordinatesRange(double latitude, double longitude)
+        {
+            CheckRange(latitude, 90, -90, "Latitude");
+            CheckRange(longitude, 180, -180, "Longitude");
+        }
+
+        private void CheckRange(double coordinate, int max, int min, string coordinateName)
+        {
+            if (coordinate < min || coordinate > max)
+            {
+                throw new ArgumentException($"{coordinateName} value must be between {min} and {max}.");
+            }
+        }
     }
 }
