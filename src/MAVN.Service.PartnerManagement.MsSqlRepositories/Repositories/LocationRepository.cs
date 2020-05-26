@@ -65,15 +65,21 @@ namespace MAVN.Service.PartnerManagement.MsSqlRepositories.Repositories
             }
         }
 
-        public async Task<IReadOnlyCollection<Location>> GetLocationsByGeohashAsync(string geohash)
+        public async Task<IEnumerable<Location>> GetLocationsByFilterAsync(string geohash, string iso3Code)
         {
             using (var context = _msSqlContextFactory.CreateDataContext())
             {
-                var locations = await context.Locations
-                    .Where(l => l.Geohash.StartsWith(geohash))
-                    .ToArrayAsync();
+                var query = context.Locations.AsNoTracking();
 
-                return _mapper.Map<IReadOnlyCollection<Location>>(locations);
+                if (!string.IsNullOrEmpty(geohash))
+                    query = query.Where(l => l.Geohash.StartsWith(geohash));
+
+                if (!string.IsNullOrEmpty(iso3Code))
+                    query = query.Where(l => l.CountryIso3Code.ToUpper() == iso3Code.ToUpper());
+
+                var locations = await query.ToArrayAsync();
+
+                return _mapper.Map<IEnumerable<Location>>(locations);
             }
         }
     }
