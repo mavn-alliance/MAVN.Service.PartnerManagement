@@ -229,18 +229,26 @@ namespace MAVN.Service.PartnerManagement.DomainServices
             return await EnrichPartner(partner);
         }
 
-        public async Task<Guid[]> GetPartnerIdsInRadiusByCoordinatesAsync(double radiusInKm, double longitude, double latitude)
+        public async Task<Guid[]> GetNearPartnerIdsAsync(double? radiusInKm, double? longitude, double? latitude, string iso3Code)
         {
             if (latitude < -90 || latitude > 90 || longitude < -180 || longitude > 180)
                 throw new ArgumentException("Invalid argument value for get near partners request");
 
-            var geohashLevel = DistanceHelper.GetGeohashLevelByRadius(radiusInKm);
-            var geohash = _geohasher.Encode(latitude, longitude, precision: geohashLevel);
-            var locations = await _locationRepository.GetLocationsByGeohashAsync(geohash);
+            string geohash = null;
+            if (radiusInKm.HasValue && latitude.HasValue && longitude.HasValue)
+            {
+                var geohashLevel = DistanceHelper.GetGeohashLevelByRadius(radiusInKm.Value);
+                geohash = _geohasher.Encode(latitude.Value, longitude.Value, precision: geohashLevel);
+            }
+
+            var locations = await _locationRepository.GetLocationsByFilterAsync(geohash, iso3Code);
+
+            if (latitude.HasValue && longitude.HasValue)
+                locations = locations.Where(l => DistanceHelper.GetDistanceInKmBetweenTwoPoints(
+                                                     latitude.Value, longitude.Value, l.Latitude.Value,
+                                                     l.Longitude.Value) <= radiusInKm);
 
             var result = locations
-                .Where(l => DistanceHelper.GetDistanceInKmBetweenTwoPoints(latitude, longitude, l.Latitude.Value,
-                                l.Longitude.Value) <= radiusInKm)
                 .Select(l => l.PartnerId)
                 .Distinct()
                 .ToArray();
