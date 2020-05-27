@@ -28,6 +28,10 @@ namespace MAVN.Service.PartnerManagement.Modules
             builder.RegisterCustomerProfileClient(_appSettings.CurrentValue.CustomerProfileServiceClient);
 
             builder.RegisterPaymentManagementClient(_appSettings.CurrentValue.PaymentManagementServiceClient, null);
+
+            builder.RegisterCredentialsClient(_appSettings.CurrentValue.CredentialsServiceClient);
+
+            builder.RegisterSessionsServiceClient(_appSettings.CurrentValue.SessionsServiceClient);
         }
     }
 }

@@ -1,4 +1,4 @@
-using JetBrains.Annotations;
+﻿using JetBrains.Annotations;
 using MAVN.Service.PartnerManagement.Client.Api;
 
 namespace MAVN.Service.PartnerManagement.Client
@@ -23,5 +23,10 @@ namespace MAVN.Service.PartnerManagement.Client
         /// Partners API.
         /// </summary>
         IPartnersApi Partners { get; }
+
+        /// <summary>
+        /// Linking API.
+        /// </summary>
+        ILinkingApi Linking { get; }
     }
 }

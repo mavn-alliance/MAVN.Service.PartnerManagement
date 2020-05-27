@@ -1,4 +1,4 @@
-using Lykke.HttpClientGenerator;
+﻿using Lykke.HttpClientGenerator;
 using MAVN.Service.PartnerManagement.Client.Api;
 
 namespace MAVN.Service.PartnerManagement.Client
@@ -14,6 +14,7 @@ namespace MAVN.Service.PartnerManagement.Client
             Auth = httpClientGenerator.Generate<IAuthApi>();
             Locations = httpClientGenerator.Generate<ILocationsApi>();
             Partners = httpClientGenerator.Generate<IPartnersApi>();
+            Linking = httpClientGenerator.Generate<ILinkingApi>();
         }
 
         /// <inheritdoc/>
@@ -24,5 +25,8 @@ namespace MAVN.Service.PartnerManagement.Client
 
         /// <inheritdoc/>
         public IPartnersApi Partners { get; }
+
+        /// <inheritdoc/>
+        public ILinkingApi Linking { get; }
     }
 }

@@ -50,9 +50,9 @@ namespace MAVN.Service.PartnerManagement.Modules
                     _appSettings.CurrentValue.PartnerManagementService.Authentication.GeneratedPasswordLength)
                 .As<IAuthService>();
 
-            builder.RegisterCredentialsClient(_appSettings.CurrentValue.CredentialsServiceClient);
-
-            builder.RegisterSessionsServiceClient(_appSettings.CurrentValue.SessionsServiceClient);
+            builder.RegisterType<PartnerLinkingService>()
+                .As<IPartnerLinkingService>()
+                .SingleInstance();
         }
     }
 }
