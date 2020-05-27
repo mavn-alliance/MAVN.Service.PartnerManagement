@@ -1,4 +1,4 @@
-using Autofac;
+﻿using Autofac;
 using MAVN.Common.MsSql;
 using MAVN.Service.PartnerManagement.Domain.Repositories;
 using MAVN.Service.PartnerManagement.MsSqlRepositories.Repositories;
@@ -27,6 +27,10 @@ namespace MAVN.Service.PartnerManagement.MsSqlRepositories
 
             builder.RegisterType<LocationRepository>()
                 .As<ILocationRepository>()
+                .SingleInstance();
+
+            builder.RegisterType<PartnerLinkingRepository>()
+                .As<IPartnerLinkingRepository>()
                 .SingleInstance();
         }
     }

@@ -12,6 +12,8 @@ namespace MAVN.Service.PartnerManagement.MsSqlRepositories
 
         public DbSet<PartnerEntity> Partners { get; set; }
         public DbSet<LocationEntity> Locations { get; set; }
+        public DbSet<PartnerLinkingInfoEntity> PartnersLinkingInfo { get; set; }
+        public DbSet<LinkedPartnerEntity> LinkedPartners { get; set; }
 
         public PartnerManagementContext(DbContextOptions contextOptions)
             : base(Schema, contextOptions)
@@ -67,6 +69,14 @@ namespace MAVN.Service.PartnerManagement.MsSqlRepositories
 
             modelBuilder.Entity<LocationEntity>()
                 .HasIndex(l => l.CountryIso3Code)
+                .IsUnique(false);
+
+            modelBuilder.Entity<PartnerLinkingInfoEntity>()
+                .HasIndex(p => p.PartnerCode)
+                .IsUnique();
+
+            modelBuilder.Entity<LinkedPartnerEntity>()
+                .HasIndex(p => p.PartnerId)
                 .IsUnique(false);
         }
     }
