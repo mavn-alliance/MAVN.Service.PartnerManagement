@@ -268,10 +268,24 @@ namespace MAVN.Service.PartnerManagement.DomainServices
 
                 locations = await _locationRepository.GetLocationsByFilterAsync(geohash, iso3Code);
 
-                //Additional precise filtering
-                locations = locations.Where(l => DistanceHelper.GetDistanceInKmBetweenTwoPoints(
-                                                     latitude, longitude, l.Latitude.Value,
-                                                     l.Longitude.Value) <= radiusInKm);
+                if(locations.Any())
+                {
+                    var locationDistances = new Dictionary<Guid, double>();
+                    foreach (var location in locations)
+                    {
+                        var distance = DistanceHelper.GetDistanceInKmBetweenTwoPoints(
+                                           latitude, longitude, location.Latitude.Value,
+                                           location.Longitude.Value);
+
+                        if(distance <= radiusInKm)
+                            locationDistances.Add(location.Id, distance);
+                    }
+
+                    //Additional precise filtering
+                    locations = locations
+                        .Where(l => locationDistances.ContainsKey(l.Id))
+                        .OrderBy(l => locationDistances[l.Id]);
+                }
 
                 hasAnyLocations = locations.Any();
                 radiusInKm *= 2;
