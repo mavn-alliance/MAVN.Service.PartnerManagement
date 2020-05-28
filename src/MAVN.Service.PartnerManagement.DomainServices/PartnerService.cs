@@ -277,12 +277,13 @@ namespace MAVN.Service.PartnerManagement.DomainServices
                                            latitude, longitude, location.Latitude.Value,
                                            location.Longitude.Value);
 
-                        locationDistances.Add(location.Id, distance);
+                        if(distance <= radiusInKm)
+                            locationDistances.Add(location.Id, distance);
                     }
 
                     //Additional precise filtering
                     locations = locations
-                        .Where(l => locationDistances[l.Id] <= radiusInKm)
+                        .Where(l => locationDistances.ContainsKey(l.Id))
                         .OrderBy(l => locationDistances[l.Id]);
                 }
 
