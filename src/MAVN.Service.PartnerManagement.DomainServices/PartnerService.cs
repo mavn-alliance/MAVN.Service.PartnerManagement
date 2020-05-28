@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
@@ -26,6 +27,8 @@ namespace MAVN.Service.PartnerManagement.DomainServices
 {
     public class PartnerService : IPartnerService
     {
+        private const double MaxRadiusInKm = 128;
+
         private readonly IPartnerRepository _partnerRepository;
         private readonly ILocationService _locationService;
         private readonly ICredentialsClient _credentialsClient;
@@ -107,7 +110,9 @@ namespace MAVN.Service.PartnerManagement.DomainServices
 
             await _partnerCreatedPublisher.PublishAsync(new PartnerCreatedEvent
             {
-                CreatedBy = createdPartner.CreatedBy, PartnerId = createdPartner.Id, Timestamp = DateTime.UtcNow
+                CreatedBy = createdPartner.CreatedBy,
+                PartnerId = createdPartner.Id,
+                Timestamp = DateTime.UtcNow
             });
 
             return createdPartner.Id;
@@ -234,19 +239,12 @@ namespace MAVN.Service.PartnerManagement.DomainServices
             if (latitude < -90 || latitude > 90 || longitude < -180 || longitude > 180)
                 throw new ArgumentException("Invalid argument value for get near partners request");
 
-            string geohash = null;
-            if (radiusInKm.HasValue && latitude.HasValue && longitude.HasValue)
-            {
-                var geohashLevel = DistanceHelper.GetGeohashLevelByRadius(radiusInKm.Value);
-                geohash = _geohasher.Encode(latitude.Value, longitude.Value, precision: geohashLevel);
-            }
+            var searchByCoordinates = latitude.HasValue && longitude.HasValue;
+            radiusInKm = radiusInKm ?? 1;
 
-            var locations = await _locationRepository.GetLocationsByFilterAsync(geohash, iso3Code);
-
-            if (latitude.HasValue && longitude.HasValue)
-                locations = locations.Where(l => DistanceHelper.GetDistanceInKmBetweenTwoPoints(
-                                                     latitude.Value, longitude.Value, l.Latitude.Value,
-                                                     l.Longitude.Value) <= radiusInKm);
+            var locations = searchByCoordinates
+                ? await GetLocationsByCoordinates(latitude.Value, longitude.Value, radiusInKm.Value, iso3Code)
+                : await _locationRepository.GetLocationsByFilterAsync(geohash: null, iso3Code);
 
             var result = locations
                 .Select(l => l.PartnerId)
@@ -254,6 +252,33 @@ namespace MAVN.Service.PartnerManagement.DomainServices
                 .ToArray();
 
             return result;
+        }
+
+        private async Task<IEnumerable<Location>> GetLocationsByCoordinates(double latitude, double longitude, double radiusInKm, string iso3Code)
+        {
+            string geohash = null;
+            var hasAnyLocations = false;
+            IEnumerable<Location> locations = null;
+            //Try to get locations in radius if there are not locations in this radius,
+            //increase it and try again until you find location or the radius exceeds the maximum allowed
+            do
+            {
+                var geohashLevel = DistanceHelper.GetGeohashLevelByRadius(radiusInKm);
+                geohash = _geohasher.Encode(latitude, longitude, precision: geohashLevel);
+
+                locations = await _locationRepository.GetLocationsByFilterAsync(geohash, iso3Code);
+
+                //Additional precise filtering
+                locations = locations.Where(l => DistanceHelper.GetDistanceInKmBetweenTwoPoints(
+                                                     latitude, longitude, l.Latitude.Value,
+                                                     l.Longitude.Value) <= radiusInKm);
+
+                hasAnyLocations = locations.Any();
+                radiusInKm *= 2;
+
+            } while (radiusInKm <= MaxRadiusInKm && !hasAnyLocations);
+
+            return locations;
         }
 
         private async Task<Partner> EnrichPartner(Partner partner)

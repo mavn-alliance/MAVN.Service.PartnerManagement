@@ -21,10 +21,8 @@ namespace MAVN.Service.PartnerManagement.Models.Validation.Partner
 
             RuleFor(p => p.RadiusInKm)
                 .GreaterThan(0)
-                .LessThanOrEqualTo(100)
-                .WithMessage("RadiusInKm value must be between 1 and 100.")
-                .NotNull()
-                .When(p => string.IsNullOrEmpty(p.CountryIso3Code) || p.Longitude.HasValue || p.Latitude.HasValue);
+                .LessThanOrEqualTo(128)
+                .WithMessage("RadiusInKm value must be between 1 and 128.");
 
             RuleFor(p => p.CountryIso3Code)
                 .NotNull()
