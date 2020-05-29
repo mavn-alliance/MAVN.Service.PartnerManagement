@@ -59,7 +59,7 @@ namespace MAVN.Service.PartnerManagement.DomainServices
             }
 
             // We don't want 3 created by on the request side of things so we are setting it here
-            partner.Locations.ForEach(async location =>
+            foreach (var location in partner.Locations)
             {
                 location.Id = Guid.NewGuid();
                 location.CreatedBy = partner.CreatedBy;
@@ -69,7 +69,7 @@ namespace MAVN.Service.PartnerManagement.DomainServices
                 _log.Info("Location creating", context: $"location: {location.ToJson()}");
 
                 customerProfileCreateActions.Add(CreatePartnerContact(location));
-            });
+            }
 
             var createResult = await Task.WhenAll(customerProfileCreateActions);
 
@@ -124,7 +124,7 @@ namespace MAVN.Service.PartnerManagement.DomainServices
 
             if (updatedLocations.Any())
             {
-                updatedLocations.ForEach(async location =>
+                foreach (var location in updatedLocations)
                 {
                     var existingLocation = existingLocations.First(p => p.Id == location.Id);
                     location.CreatedBy = existingLocation.CreatedBy;
@@ -135,12 +135,12 @@ namespace MAVN.Service.PartnerManagement.DomainServices
                     _log.Info("Location updating", context: $"location: {location.ToJson()}");
 
                     customerProfileUpdateActions.Add(UpdatePartnerContact(location));
-                });
+                }
             }
 
             if (createdLocations.Any())
             {
-                createdLocations.ForEach(async location =>
+                foreach (var location in createdLocations)
                 {
                     location.Id = Guid.NewGuid();
                     location.CreatedBy = partner.CreatedBy;
@@ -150,7 +150,7 @@ namespace MAVN.Service.PartnerManagement.DomainServices
                     _log.Info("Location creating", context: $"location: {location.ToJson()}");
 
                     customerProfileCreateActions.Add(CreatePartnerContact(location));
-                });
+                }
             }
 
             var updateResult = await Task.WhenAll(customerProfileUpdateActions);
