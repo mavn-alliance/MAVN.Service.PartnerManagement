@@ -240,7 +240,7 @@ namespace MAVN.Service.PartnerManagement.DomainServices
                 throw new ArgumentException("Invalid argument value for get near partners request");
 
             var searchByCoordinates = latitude.HasValue && longitude.HasValue;
-            radiusInKm = radiusInKm ?? 1;
+            radiusInKm = radiusInKm ?? 8;
 
             var locations = searchByCoordinates
                 ? await GetLocationsByCoordinates(latitude.Value, longitude.Value, radiusInKm.Value, iso3Code)
@@ -257,8 +257,9 @@ namespace MAVN.Service.PartnerManagement.DomainServices
         private async Task<IEnumerable<Location>> GetLocationsByCoordinates(double latitude, double longitude, double radiusInKm, string iso3Code)
         {
             string geohash = null;
-            var hasAnyLocations = false;
+            var locationsCount = 0;
             IEnumerable<Location> locations = null;
+            const int locationsLimit = 20;
             //Try to get locations in radius if there are not locations in this radius,
             //increase it and try again until you find location or the radius exceeds the maximum allowed
             do
@@ -287,10 +288,10 @@ namespace MAVN.Service.PartnerManagement.DomainServices
                         .OrderBy(l => locationDistances[l.Id]);
                 }
 
-                hasAnyLocations = locations.Any();
+                locationsCount = locations.Count();
                 radiusInKm *= 2;
 
-            } while (radiusInKm <= MaxRadiusInKm && !hasAnyLocations);
+            } while (radiusInKm <= MaxRadiusInKm && locationsCount < locationsLimit);
 
             return locations;
         }
