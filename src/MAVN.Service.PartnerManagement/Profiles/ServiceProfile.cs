@@ -42,11 +42,11 @@ namespace MAVN.Service.PartnerManagement.Profiles
 
             CreateMap<ContactPersonModel, ContactPerson>(MemberList.Destination);
 
-            CreateMap<PartnerContactResponse, ContactPerson>(MemberList.Destination)
-                .ForMember(dest => dest.FirstName, opt => opt.MapFrom(src => src.PartnerContact.FirstName))
-                .ForMember(dest => dest.LastName, opt => opt.MapFrom(src => src.PartnerContact.LastName))
-                .ForMember(dest => dest.Email, opt => opt.MapFrom(src => src.PartnerContact.Email))
-                .ForMember(dest => dest.PhoneNumber, opt => opt.MapFrom(src => src.PartnerContact.PhoneNumber));
+            CreateMap<PartnerContact, ContactPerson>(MemberList.Destination)
+                .ForMember(dest => dest.FirstName, opt => opt.MapFrom(src => src.FirstName))
+                .ForMember(dest => dest.LastName, opt => opt.MapFrom(src => src.LastName))
+                .ForMember(dest => dest.Email, opt => opt.MapFrom(src => src.Email))
+                .ForMember(dest => dest.PhoneNumber, opt => opt.MapFrom(src => src.PhoneNumber));
 
             CreateMap<Partner, PartnerListDetailsModel>(MemberList.Destination);
             CreateMap<Location, PartnerListLocationModel>(MemberList.Destination);

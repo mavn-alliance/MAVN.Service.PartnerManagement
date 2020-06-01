@@ -7,7 +7,6 @@ using Common.Log;
 using Geohash;
 using Lykke.Common.Log;
 using MAVN.Service.CustomerProfile.Client;
-using MAVN.Service.CustomerProfile.Client.Models.Enums;
 using MAVN.Service.CustomerProfile.Client.Models.Requests;
 using MAVN.Service.PartnerManagement.Domain.Exceptions;
 using MAVN.Service.PartnerManagement.Domain.Models;
@@ -47,10 +46,9 @@ namespace MAVN.Service.PartnerManagement.DomainServices
             return _locationRepository.GetByExternalIdAsync(externalId);
         }
 
-        public async Task<IReadOnlyCollection<Location>> CreateLocationsContactPersonForPartnerAsync(Partner partner)
+        public async Task CreateLocationsContactPersonForPartnerAsync(Partner partner)
         {
-            var customerProfileCreateActions =
-                new List<Task<(PartnerContactErrorCodes ErrorCode, Location Location)>>();
+            var customerProfileCreateActions = new List<Task>();
 
             if (await _locationRepository.AreExternalIdsNotUniqueAsync(partner.Id,
                 partner.Locations.Select(l => l.ExternalId)))
@@ -68,20 +66,11 @@ namespace MAVN.Service.PartnerManagement.DomainServices
 
                 _log.Info("Location creating", context: $"location: {location.ToJson()}");
 
-                customerProfileCreateActions.Add(CreatePartnerContact(location));
+                if(location.ContactPerson != null && !string.IsNullOrEmpty(location.ContactPerson.Email))
+                    customerProfileCreateActions.Add(CreateOrUpdatePartnerContact(location));
             }
 
-            var createResult = await Task.WhenAll(customerProfileCreateActions);
-
-            if (createResult.Any(r => r.ErrorCode != PartnerContactErrorCodes.None))
-            {
-                var exception =
-                    new LocationContactRegistrationFailedException("Creating the contact person data failed.");
-                _log.Error(exception, context: createResult);
-                throw exception;
-            }
-
-            return createResult.Select(l => l.Location).ToList();
+            await Task.WhenAll(customerProfileCreateActions);
         }
 
         public async Task<IReadOnlyCollection<Location>> UpdateRangeAsync(Partner partner,
@@ -105,11 +94,9 @@ namespace MAVN.Service.PartnerManagement.DomainServices
                     updatedLocations.Add(location);
             }
 
-            var repositoryActions = new List<Task>();
-            var customerProfileUpdateActions =
-                new List<Task<(PartnerContactErrorCodes ErrorCode, Location Location)>>();
-            var customerProfileCreateActions =
-                new List<Task<(PartnerContactErrorCodes ErrorCode, Location Location)>>();
+            var deleteActions = new List<Task>();
+            var customerProfileUpdateActions = new List<Task>();
+            var customerProfileCreateActions = new List<Task>();
 
             // TODO: Add transaction
             if (deletedLocations.Any())
@@ -118,7 +105,7 @@ namespace MAVN.Service.PartnerManagement.DomainServices
                 {
                     _log.Info("Location deleting", context: $"location: {location.ToJson()}");
 
-                    repositoryActions.Add(_customerProfileClient.PartnerContact.DeleteAsync(location.Id.ToString()));
+                    deleteActions.Add(_customerProfileClient.PartnerContact.DeleteIfExistAsync(location.Id.ToString()));
                 });
             }
 
@@ -133,8 +120,10 @@ namespace MAVN.Service.PartnerManagement.DomainServices
                     await SetCountryIso3Code(location);
 
                     _log.Info("Location updating", context: $"location: {location.ToJson()}");
-
-                    customerProfileUpdateActions.Add(UpdatePartnerContact(location));
+                    if (location.ContactPerson != null && !string.IsNullOrEmpty(location.ContactPerson.Email))
+                        customerProfileUpdateActions.Add(CreateOrUpdatePartnerContact(location));
+                    else
+                        deleteActions.Add(_customerProfileClient.PartnerContact.DeleteIfExistAsync(location.Id.ToString()));
                 }
             }
 
@@ -149,35 +138,19 @@ namespace MAVN.Service.PartnerManagement.DomainServices
 
                     _log.Info("Location creating", context: $"location: {location.ToJson()}");
 
-                    customerProfileCreateActions.Add(CreatePartnerContact(location));
+                    if (location.ContactPerson != null && !string.IsNullOrEmpty(location.ContactPerson.Email))
+                        customerProfileCreateActions.Add(CreateOrUpdatePartnerContact(location));
                 }
             }
 
-            var updateResult = await Task.WhenAll(customerProfileUpdateActions);
-
-            if (updateResult.Any(r => r.Item1 != PartnerContactErrorCodes.None))
-            {
-                var exception = new LocationContactUpdateFailedException("Updating the contact person data failed.");
-                _log.Error(exception, context: updateResult);
-                throw exception;
-            }
-
-            var createResult = await Task.WhenAll(customerProfileCreateActions);
-
-            if (createResult.Any(r => r.Item1 != PartnerContactErrorCodes.None))
-            {
-                var exception =
-                    new LocationContactRegistrationFailedException("Creating the Contact person data failed.");
-                _log.Error(exception, context: createResult);
-                throw exception;
-            }
-
-            await Task.WhenAll(repositoryActions);
+            await Task.WhenAll(customerProfileUpdateActions);
+            await Task.WhenAll(customerProfileCreateActions);
+            await Task.WhenAll(deleteActions);
 
             var processedLocations = new List<Location>();
 
-            processedLocations.AddRange(updateResult.Select(r => r.Location));
-            processedLocations.AddRange(createResult.Select(r => r.Location));
+            processedLocations.AddRange(createdLocations);
+            processedLocations.AddRange(updatedLocations);
 
             return processedLocations;
         }
@@ -201,23 +174,9 @@ namespace MAVN.Service.PartnerManagement.DomainServices
             return location?.Latitude != null && location?.Longitude != null;
         }
 
-        private async Task<(PartnerContactErrorCodes, Location)> UpdatePartnerContact(Location location)
+        private async Task CreateOrUpdatePartnerContact(Location location)
         {
-            var result = await _customerProfileClient.PartnerContact.UpdateAsync(new PartnerContactUpdateRequestModel
-            {
-                LocationId = location.Id.ToString(),
-                FirstName = location.ContactPerson.FirstName,
-                LastName = location.ContactPerson.LastName,
-                Email = location.ContactPerson.Email.ToLower(),
-                PhoneNumber = location.ContactPerson.PhoneNumber
-            });
-
-            return (result, location);
-        }
-
-        private async Task<(PartnerContactErrorCodes, Location)> CreatePartnerContact(Location location)
-        {
-            var result = await _customerProfileClient.PartnerContact.CreateIfNotExistAsync(
+            await _customerProfileClient.PartnerContact.CreateOrUpdateAsync(
                 new PartnerContactRequestModel
                 {
                     LocationId = location.Id.ToString(),
@@ -226,8 +185,6 @@ namespace MAVN.Service.PartnerManagement.DomainServices
                     Email = location.ContactPerson.Email.ToLower(),
                     PhoneNumber = location.ContactPerson.PhoneNumber
                 });
-
-            return (result, location);
         }
     }
 }

@@ -11,7 +11,7 @@ namespace MAVN.Service.PartnerManagement.Domain.Services
 
         Task<Location> GetByExternalIdAsync(string externalId);
 
-        Task<IReadOnlyCollection<Location>> CreateLocationsContactPersonForPartnerAsync(Partner partner);
+        Task CreateLocationsContactPersonForPartnerAsync(Partner partner);
 
         Task<IReadOnlyCollection<Location>> UpdateRangeAsync(Partner partner,
             IReadOnlyCollection<Location> locations, IReadOnlyCollection<Location> existingLocations);

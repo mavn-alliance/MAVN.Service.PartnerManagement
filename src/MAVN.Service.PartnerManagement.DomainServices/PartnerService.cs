@@ -63,7 +63,7 @@ namespace MAVN.Service.PartnerManagement.DomainServices
         {
             partner.Id = Guid.NewGuid();
 
-            partner.Locations = await _locationService.CreateLocationsContactPersonForPartnerAsync(partner);
+            await _locationService.CreateLocationsContactPersonForPartnerAsync(partner);
 
             if (partner.UseGlobalCurrencyRate)
             {
@@ -316,12 +316,12 @@ namespace MAVN.Service.PartnerManagement.DomainServices
         private async Task GetContactPerson(Location location)
         {
             var partnerContact = await _customerProfileClient.PartnerContact.GetByLocationIdAsync(location.Id.ToString());
-            location.ContactPerson = _mapper.Map<ContactPerson>(partnerContact);
+            location.ContactPerson = _mapper.Map<ContactPerson>(partnerContact.PartnerContact);
         }
 
         private async Task DeleteContactPerson(Location location)
         {
-            await _customerProfileClient.PartnerContact.DeleteAsync(location.Id.ToString());
+            await _customerProfileClient.PartnerContact.DeleteIfExistAsync(location.Id.ToString());
             location.ContactPerson = null;
         }
     }

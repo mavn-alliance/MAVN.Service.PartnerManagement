@@ -150,22 +150,19 @@ namespace MAVN.Service.PartnerManagement.Tests.DomainServices
 
         public LocationServiceTestsFixture SetupUpdateAction()
         {
-            CustomerProfileClientMock.Setup(m => m.PartnerContact.DeleteAsync(It.IsAny<string>()))
+            CustomerProfileClientMock.Setup(m => m.PartnerContact.DeleteIfExistAsync(It.IsAny<string>()))
                 .Returns(Task.CompletedTask);
 
-            CustomerProfileClientMock.Setup(m => m.PartnerContact.UpdateAsync(It.IsAny<PartnerContactUpdateRequestModel>()))
-                .ReturnsAsync(() => PartnerUpdateContactErrorCodes);
-
-            CustomerProfileClientMock.Setup(m => m.PartnerContact.CreateIfNotExistAsync(It.IsAny<PartnerContactRequestModel>()))
-                .ReturnsAsync(() => PartnerCreateContactErrorCodes);
+            CustomerProfileClientMock.Setup(m => m.PartnerContact.CreateOrUpdateAsync(It.IsAny<PartnerContactRequestModel>()))
+                .Returns(Task.CompletedTask);
 
             return this;
         }
 
         public LocationServiceTestsFixture SetupCreateAction()
         {
-            CustomerProfileClientMock.Setup(m => m.PartnerContact.CreateIfNotExistAsync(It.IsAny<PartnerContactRequestModel>()))
-                .ReturnsAsync(() => PartnerCreateContactErrorCodes);
+            CustomerProfileClientMock.Setup(m => m.PartnerContact.CreateOrUpdateAsync(It.IsAny<PartnerContactRequestModel>()))
+                .Returns(Task.CompletedTask);
 
             return this;
         }

@@ -145,7 +145,7 @@ namespace MAVN.Service.PartnerManagement.Tests.DomainServices
 
             // Assert
             fixture.CustomerProfileClientMock
-                .Verify(p => p.PartnerContact.DeleteAsync(It.IsAny<string>()), Times.Exactly(2));
+                .Verify(p => p.PartnerContact.DeleteIfExistAsync(It.IsAny<string>()), Times.Exactly(2));
 
             fixture.PartnerRepositoryMock
                 .Verify(p => p.DeleteAsync(It.Is<Guid>(g => g == partnerId)),Times.Once);
@@ -166,7 +166,7 @@ namespace MAVN.Service.PartnerManagement.Tests.DomainServices
 
             // Assert
             fixture.CustomerProfileClientMock
-                .Verify(p => p.PartnerContact.DeleteAsync(It.IsAny<string>()), Times.Never);
+                .Verify(p => p.PartnerContact.DeleteIfExistAsync(It.IsAny<string>()), Times.Never);
 
             fixture.PartnerRepositoryMock
                 .Verify(p => p.DeleteAsync(It.Is<Guid>(g => g == partnerId)), Times.Never);
