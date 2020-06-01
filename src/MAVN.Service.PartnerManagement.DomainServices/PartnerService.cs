@@ -240,10 +240,9 @@ namespace MAVN.Service.PartnerManagement.DomainServices
                 throw new ArgumentException("Invalid argument value for get near partners request");
 
             var searchByCoordinates = latitude.HasValue && longitude.HasValue;
-            radiusInKm = radiusInKm ?? 8;
 
             var locations = searchByCoordinates
-                ? await GetLocationsByCoordinates(latitude.Value, longitude.Value, radiusInKm.Value, iso3Code)
+                ? await GetLocationsByCoordinates(latitude.Value, longitude.Value, radiusInKm, iso3Code)
                 : await _locationRepository.GetLocationsByFilterAsync(geohash: null, iso3Code);
 
             var result = locations
@@ -254,17 +253,20 @@ namespace MAVN.Service.PartnerManagement.DomainServices
             return result;
         }
 
-        private async Task<IEnumerable<Location>> GetLocationsByCoordinates(double latitude, double longitude, double radiusInKm, string iso3Code)
+        private async Task<IEnumerable<Location>> GetLocationsByCoordinates(double latitude, double longitude, double? radiusInKm, string iso3Code)
         {
             string geohash = null;
             var locationsCount = 0;
             IEnumerable<Location> locations = null;
             const int locationsLimit = 20;
+            var shouldSearchIteratively = !radiusInKm.HasValue;
+            radiusInKm = radiusInKm ?? 8;
+
             //Try to get locations in radius if there are not locations in this radius,
             //increase it and try again until you find location or the radius exceeds the maximum allowed
             do
             {
-                var geohashLevel = DistanceHelper.GetGeohashLevelByRadius(radiusInKm);
+                var geohashLevel = DistanceHelper.GetGeohashLevelByRadius(radiusInKm.Value);
                 geohash = _geohasher.Encode(latitude, longitude, precision: geohashLevel);
 
                 locations = await _locationRepository.GetLocationsByFilterAsync(geohash, iso3Code);
@@ -278,7 +280,7 @@ namespace MAVN.Service.PartnerManagement.DomainServices
                                            latitude, longitude, location.Latitude.Value,
                                            location.Longitude.Value);
 
-                        if(distance <= radiusInKm)
+                        if(distance <= radiusInKm.Value)
                             locationDistances.Add(location.Id, distance);
                     }
 
@@ -291,7 +293,7 @@ namespace MAVN.Service.PartnerManagement.DomainServices
                 locationsCount = locations.Count();
                 radiusInKm *= 2;
 
-            } while (radiusInKm <= MaxRadiusInKm && locationsCount < locationsLimit);
+            } while (shouldSearchIteratively && radiusInKm.Value <= MaxRadiusInKm && locationsCount < locationsLimit);
 
             return locations;
         }
