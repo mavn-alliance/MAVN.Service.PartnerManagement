@@ -23,8 +23,6 @@ namespace MAVN.Service.PartnerManagement.Models.Validation.Location
                 .WithMessage("The description can be empty or within a range of 3 to 100 characters long.");
 
             RuleFor(p => p.ContactPerson)
-                .Must(l => l != null)
-                .WithMessage("The Contact Person should be present")
                 .SetValidator(new ContactPersonModelValidation());
 
             RuleFor(l=>l.ExternalId)

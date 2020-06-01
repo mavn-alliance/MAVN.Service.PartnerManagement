@@ -143,7 +143,7 @@ namespace MAVN.Service.PartnerManagement.Tests.DomainServices
             PartnerRepositoryMock.Setup(m => m.GetByIdAsync(It.IsAny<Guid>()))
                 .ReturnsAsync(() => Partner);
 
-            CustomerProfileClientMock.Setup(m => m.PartnerContact.DeleteAsync(It.IsAny<string>()))
+            CustomerProfileClientMock.Setup(m => m.PartnerContact.DeleteIfExistAsync(It.IsAny<string>()))
                 .Returns(Task.CompletedTask);
 
             PartnerRepositoryMock.Setup(m => m.DeleteAsync(It.IsAny<Guid>()))
@@ -155,7 +155,7 @@ namespace MAVN.Service.PartnerManagement.Tests.DomainServices
         public PartnerServiceTestsFixture SetupCreateAction()
         {
             LocationServiceMock.Setup(m => m.CreateLocationsContactPersonForPartnerAsync(It.IsAny<Partner>()))
-                .ReturnsAsync(() => Partner.Locations);
+                .Returns(Task.CompletedTask);
 
             PartnerRepositoryMock.Setup(m => m.CreateAsync(It.IsAny<Partner>()))
                 .ReturnsAsync(() => Partner);
