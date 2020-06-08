@@ -19,10 +19,12 @@ namespace MAVN.Service.PartnerManagement.Profiles
 
             CreateMap<PartnerCreateModel, Partner>(MemberList.Destination)
                 .ForMember(dest => dest.Id, opt => opt.Ignore())
+                .ForMember(dest => dest.ReferralCode, opt => opt.Ignore())
                 .ForMember(dest => dest.CreatedAt, opt => opt.Ignore());
 
             CreateMap<PartnerUpdateModel, Partner>(MemberList.Destination)
                 .ForMember(dest => dest.CreatedAt, opt => opt.Ignore())
+                .ForMember(dest => dest.ReferralCode, opt => opt.Ignore())
                 .ForMember(dest => dest.CreatedBy, opt => opt.Ignore());
 
             CreateMap<LocationCreateModel, Location>(MemberList.Destination)

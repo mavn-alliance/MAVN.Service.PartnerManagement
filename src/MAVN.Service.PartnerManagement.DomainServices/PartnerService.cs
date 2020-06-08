@@ -21,6 +21,9 @@ using MAVN.Service.PartnerManagement.Domain.Models.Dto;
 using MAVN.Service.PartnerManagement.Domain.Repositories;
 using MAVN.Service.PartnerManagement.Domain.Services;
 using MAVN.Service.PartnerManagement.DomainServices.Helpers;
+using MAVN.Service.Referral.Client;
+using MAVN.Service.Referral.Client.Enums;
+using MAVN.Service.Referral.Client.Models.Requests;
 using MoreLinq;
 
 namespace MAVN.Service.PartnerManagement.DomainServices
@@ -33,6 +36,7 @@ namespace MAVN.Service.PartnerManagement.DomainServices
         private readonly ILocationService _locationService;
         private readonly ICredentialsClient _credentialsClient;
         private readonly ICustomerProfileClient _customerProfileClient;
+        private readonly IReferralClient _referralClient;
         private readonly ILocationRepository _locationRepository;
         private readonly IRabbitPublisher<PartnerCreatedEvent> _partnerCreatedPublisher;
         private readonly IMapper _mapper;
@@ -44,6 +48,7 @@ namespace MAVN.Service.PartnerManagement.DomainServices
             ILocationService locationService,
             ICredentialsClient credentialsClient,
             ICustomerProfileClient customerProfileClient,
+            IReferralClient referralClient,
             ILocationRepository locationRepository,
             IRabbitPublisher<PartnerCreatedEvent> partnerCreatedPublisher,
             IMapper mapper,
@@ -53,6 +58,7 @@ namespace MAVN.Service.PartnerManagement.DomainServices
             _locationService = locationService;
             _credentialsClient = credentialsClient;
             _customerProfileClient = customerProfileClient;
+            _referralClient = referralClient;
             _locationRepository = locationRepository;
             _partnerCreatedPublisher = partnerCreatedPublisher;
             _mapper = mapper;
@@ -107,6 +113,11 @@ namespace MAVN.Service.PartnerManagement.DomainServices
             }
 
             var createdPartner = await _partnerRepository.CreateAsync(partner);
+
+            var referralResponse = await _referralClient.ReferralApi.PostAsync(new ReferralCreateRequest { CustomerId = createdPartner.Id.ToString() });
+
+            if (referralResponse.ErrorCode != ReferralErrorCodes.None)
+                _log.Warning("Referral code creation failed for partner", context: new { referralResponse.ErrorCode, PartnerId = createdPartner.Id });
 
             await _partnerCreatedPublisher.PublishAsync(new PartnerCreatedEvent
             {
@@ -271,7 +282,7 @@ namespace MAVN.Service.PartnerManagement.DomainServices
 
                 locations = await _locationRepository.GetLocationsByFilterAsync(geohash, iso3Code);
 
-                if(locations.Any())
+                if (locations.Any())
                 {
                     var locationDistances = new Dictionary<Guid, double>();
                     foreach (var location in locations)
@@ -280,7 +291,7 @@ namespace MAVN.Service.PartnerManagement.DomainServices
                                            latitude, longitude, location.Latitude.Value,
                                            location.Longitude.Value);
 
-                        if(distance <= radiusInKm.Value)
+                        if (distance <= radiusInKm.Value)
                             locationDistances.Add(location.Id, distance);
                     }
 
@@ -301,14 +312,34 @@ namespace MAVN.Service.PartnerManagement.DomainServices
         private async Task<Partner> EnrichPartner(Partner partner)
         {
             if (partner == null)
-            {
                 return null;
-            }
 
             var asyncActions = new List<Task>();
             partner.Locations?.ForEach(l => { asyncActions.Add(GetContactPerson(l)); });
 
             await Task.WhenAll(asyncActions);
+
+            string referralCode = null;
+            var referralCodeResponse = await _referralClient.ReferralApi.GetAsync(partner.Id.ToString());
+
+            if (referralCodeResponse.ErrorCode != ReferralErrorCodes.None)
+            {
+                var createReferralCodeResponse =
+                    await _referralClient.ReferralApi.PostAsync(
+                        new ReferralCreateRequest {CustomerId = partner.Id.ToString()});
+
+                if (createReferralCodeResponse.ErrorCode != ReferralErrorCodes.None)
+                    _log.Warning("Referral code creation failed for partner",
+                        context: new {createReferralCodeResponse.ErrorCode, PartnerId = partner.Id});
+                else
+                    referralCode = createReferralCodeResponse.ReferralCode;
+            }
+            else
+            {
+                referralCode = referralCodeResponse.ReferralCode;
+            }
+
+            partner.ReferralCode = referralCode;
 
             return partner;
         }

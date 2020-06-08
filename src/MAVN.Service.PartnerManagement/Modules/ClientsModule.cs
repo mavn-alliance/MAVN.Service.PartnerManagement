@@ -6,6 +6,7 @@ using MAVN.Service.PartnerManagement.Settings;
 using MAVN.Service.Sessions.Client;
 using Lykke.SettingsReader;
 using MAVN.Service.PaymentManagement.Client;
+using MAVN.Service.Referral.Client;
 
 namespace MAVN.Service.PartnerManagement.Modules
 {
@@ -32,6 +33,8 @@ namespace MAVN.Service.PartnerManagement.Modules
             builder.RegisterCredentialsClient(_appSettings.CurrentValue.CredentialsServiceClient);
 
             builder.RegisterSessionsServiceClient(_appSettings.CurrentValue.SessionsServiceClient);
+
+            builder.RegisterReferralClient(_appSettings.CurrentValue.ReferralServiceClient, null);
         }
     }
 }

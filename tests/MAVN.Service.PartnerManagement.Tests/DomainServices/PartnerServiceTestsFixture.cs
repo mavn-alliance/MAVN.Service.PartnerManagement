@@ -14,6 +14,10 @@ using MAVN.Service.PartnerManagement.Domain.Models.Dto;
 using MAVN.Service.PartnerManagement.Domain.Repositories;
 using MAVN.Service.PartnerManagement.Domain.Services;
 using MAVN.Service.PartnerManagement.DomainServices;
+using MAVN.Service.Referral.Client;
+using MAVN.Service.Referral.Client.Enums;
+using MAVN.Service.Referral.Client.Models.Requests;
+using MAVN.Service.Referral.Client.Models.Responses;
 using Moq;
 using Vertical = MAVN.Service.PartnerManagement.Domain.Models.Vertical;
 
@@ -31,12 +35,14 @@ namespace MAVN.Service.PartnerManagement.Tests.DomainServices
             CustomerProfileClientMock = new Mock<ICustomerProfileClient>(MockBehavior.Strict);
             LocationsRepositoryMock = new Mock<ILocationRepository>(MockBehavior.Strict);
             PartnerCreatedPublisherMock = new Mock<IRabbitPublisher<PartnerCreatedEvent>>(MockBehavior.Strict);
+            ReferralClientMock = new Mock<IReferralClient>();
 
             PartnerService = new PartnerService(
                 PartnerRepositoryMock.Object,
                 LocationServiceMock.Object,
                 CredentialsClientMock.Object,
                 CustomerProfileClientMock.Object,
+                ReferralClientMock.Object,
                 LocationsRepositoryMock.Object,
                 PartnerCreatedPublisherMock.Object,
                 mapper,
@@ -94,6 +100,7 @@ namespace MAVN.Service.PartnerManagement.Tests.DomainServices
         public PartnerService PartnerService { get; set; }
         public Mock<ICustomerProfileClient> CustomerProfileClientMock { get; set; }
         public Mock<ICredentialsClient> CredentialsClientMock { get; set; }
+        public Mock<IReferralClient> ReferralClientMock { get; set; }
         public Mock<ILocationService> LocationServiceMock { get; set; }
         public Mock<IPartnerRepository> PartnerRepositoryMock { get; set; }
         public Mock<ILocationRepository> LocationsRepositoryMock { get; set; }
@@ -111,6 +118,14 @@ namespace MAVN.Service.PartnerManagement.Tests.DomainServices
         public CredentialsUpdateResponse CredentialsUpdateResponse { get; set; } = new CredentialsUpdateResponse
         {
             Error = CredentialsError.None
+        };
+        public ReferralCreateResponse ReferralCreateResponse { get; set; } = new ReferralCreateResponse
+        {
+            ErrorCode = ReferralErrorCodes.None
+        };
+        public ReferralResultResponse ReferralGetResponse { get; set; } = new ReferralResultResponse
+        {
+            ErrorCode = ReferralErrorCodes.None
         };
 
         public Partner Partner { get; set; }
@@ -134,6 +149,9 @@ namespace MAVN.Service.PartnerManagement.Tests.DomainServices
 
             PartnerRepositoryMock.Setup(m => m.GetByIdsAsync(It.IsAny<Guid[]>()))
                 .ReturnsAsync(() => Partners.Item1);
+
+            ReferralClientMock.Setup(x => x.ReferralApi.GetAsync(It.IsAny<string>()))
+                .ReturnsAsync(() => ReferralGetResponse);
 
             return this;
         }
@@ -166,6 +184,9 @@ namespace MAVN.Service.PartnerManagement.Tests.DomainServices
             PartnerCreatedPublisherMock.Setup(x => x.PublishAsync(It.IsAny<PartnerCreatedEvent>()))
                 .Returns(Task.CompletedTask)
                 .Verifiable();
+
+            ReferralClientMock.Setup(x => x.ReferralApi.PostAsync(It.IsAny<ReferralCreateRequest>()))
+                .ReturnsAsync(() => ReferralCreateResponse);
 
             return this;
         }
