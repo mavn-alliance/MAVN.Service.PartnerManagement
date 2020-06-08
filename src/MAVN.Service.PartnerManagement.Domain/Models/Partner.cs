@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using MAVN.Numerics;
 
@@ -68,5 +68,10 @@ namespace MAVN.Service.PartnerManagement.Domain.Models
         /// The date and time of creation.
         /// </summary>
         public DateTime CreatedAt { get; set; }
+
+        /// <summary>
+        /// Represents code which is used to refer customers
+        /// </summary>
+        public string ReferralCode { get; set; }
     }
 }

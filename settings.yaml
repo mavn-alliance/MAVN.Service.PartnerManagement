@@ -51,6 +51,10 @@ PaymentManagementServiceClient:
     ServiceUrl:
         settings-key: PaymentManagementServiceUrl
 
+ReferralServiceClient:
+    ServiceUrl:
+        settings-key: ReferralServiceUrl
+
 MonitoringServiceClient:
     MonitoringServiceUrl:
         settings-key: MonitoringServiceUrl

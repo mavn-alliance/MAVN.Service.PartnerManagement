@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using JetBrains.Annotations;
 using MAVN.Service.PartnerManagement.Client.Models.Location;
@@ -36,5 +36,10 @@ namespace MAVN.Service.PartnerManagement.Client.Models.Partner
         /// Represents the date of creation of the partner
         /// </summary>
         public DateTime CreatedAt { get; set; }
+
+        /// <summary>
+        /// Represents code which is used to refer customers
+        /// </summary>
+        public string ReferralCode { get; set; }
     }
 }

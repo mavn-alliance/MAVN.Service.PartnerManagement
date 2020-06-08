@@ -9,7 +9,8 @@ namespace MAVN.Service.PartnerManagement.MsSqlRepositories
         public AutoMapperProfile()
         {
             CreateMap<PartnerEntity, Partner>(MemberList.Destination)
-                .ForMember(dest => dest.ClientSecret, opt => opt.Ignore());
+                .ForMember(dest => dest.ClientSecret, opt => opt.Ignore())
+                .ForMember(dest => dest.ReferralCode, opt => opt.Ignore());
 
             CreateMap<Partner, PartnerEntity>(MemberList.Destination)
                 .ForMember(dest => dest.Locations, opt => opt.MapFrom(src => src.Locations));
