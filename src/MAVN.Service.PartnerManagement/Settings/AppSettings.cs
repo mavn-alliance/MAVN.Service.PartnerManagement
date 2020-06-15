@@ -2,6 +2,7 @@
 using Lykke.Sdk.Settings;
 using MAVN.Service.Credentials.Client;
 using MAVN.Service.CustomerProfile.Client;
+using MAVN.Service.Kyc.Client;
 using MAVN.Service.PaymentManagement.Client;
 using MAVN.Service.Referral.Client;
 using MAVN.Service.Sessions.Client;
@@ -22,5 +23,7 @@ namespace MAVN.Service.PartnerManagement.Settings
         public PaymentManagementServiceClientSettings PaymentManagementServiceClient { get; set; }
 
         public ReferralServiceClientSettings ReferralServiceClient { get; set; }
+
+        public KycServiceClientSettings KycServiceClient { get; set; }
     }
 }

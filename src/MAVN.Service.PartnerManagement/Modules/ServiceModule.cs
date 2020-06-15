@@ -8,6 +8,7 @@ using MAVN.Service.PartnerManagement.Settings;
 using MAVN.Service.Sessions.Client;
 using Lykke.SettingsReader;
 using MAVN.Service.PartnerManagement.DomainServices.GeocodingReader;
+using MAVN.Service.Kyc.Client;
 
 namespace MAVN.Service.PartnerManagement.Modules
 {
@@ -39,6 +40,10 @@ namespace MAVN.Service.PartnerManagement.Modules
 
             builder.RegisterType<LocationService>()
                 .As<ILocationService>();
+
+            builder.RegisterType<PartnerAbilityCheckService>()
+                .As<IPartnerAbilityCheckService>()
+                .SingleInstance();
 
             builder.RegisterType<AuthService>()
                 .WithParameter("sessionsServiceTokenTimeToLiveInSeconds",
