@@ -26,5 +26,10 @@ namespace MAVN.Service.PartnerManagement.Client.Models.Partner
         /// Latitude of the location
         /// </summary>
         public double? Latitude { get; set; }
+
+        /// <summary>
+        /// Address
+        /// </summary>
+        public string Address { get; set; }
     }
 }
