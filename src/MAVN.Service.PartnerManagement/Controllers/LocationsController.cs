@@ -48,5 +48,21 @@ namespace MAVN.Service.PartnerManagement.Controllers
 
             return _mapper.Map<LocationInfoResponse>(result);
         }
+
+        /// <summary>
+        /// Gets country ISO3 code for all locations
+        /// </summary>
+        /// <returns><see cref="GetCountryIso3CodeForAllLocationsResponse"/></returns>
+        /// <response code="200">List of iso3 codes</response>
+        [HttpGet("countrycodes")]
+        public async Task<GetCountryIso3CodeForAllLocationsResponse> GetCountryIso3CodeForAllLocations()
+        {
+            var result = await _locationService.GetIso3CodesForLocations();
+
+            return new GetCountryIso3CodeForAllLocationsResponse
+            {
+                CountriesIso3Codes = result
+            };
+        }
     }
 }

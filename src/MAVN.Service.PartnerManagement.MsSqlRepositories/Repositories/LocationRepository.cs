@@ -82,5 +82,19 @@ namespace MAVN.Service.PartnerManagement.MsSqlRepositories.Repositories
                 return _mapper.Map<IEnumerable<Location>>(locations);
             }
         }
+
+        public async Task<IReadOnlyList<string>> GetIso3CodesForAllLocations()
+        {
+            using (var context = _msSqlContextFactory.CreateDataContext())
+            {
+                var result = await context.Locations
+                    .Where(x => !string.IsNullOrEmpty(x.CountryIso3Code))
+                    .Select(x => x.CountryIso3Code)
+                    .Distinct()
+                    .ToListAsync();
+
+                return result;
+            }
+        }
     }
 }
