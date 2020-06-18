@@ -11,13 +11,13 @@ namespace MAVN.Service.PartnerManagement.Models.Validation.Partner
                 .InclusiveBetween(-90, 90)
                 .WithMessage("Latitude value must be between -90 and 90.")
                 .NotNull()
-                .When(p => string.IsNullOrEmpty(p.CountryIso3Code) || p.Longitude.HasValue || p.RadiusInKm.HasValue);
+                .When(p => string.IsNullOrEmpty(p.CountryIso3Code) || p.Longitude.HasValue);
 
             RuleFor(p => p.Longitude)
                 .InclusiveBetween(-180, 180)
                 .WithMessage("Longitude value must be between -180 and 180.")
                 .NotNull()
-                .When(p => string.IsNullOrEmpty(p.CountryIso3Code) || p.Latitude.HasValue || p.RadiusInKm.HasValue);
+                .When(p => string.IsNullOrEmpty(p.CountryIso3Code) || p.Latitude.HasValue) ;
 
             RuleFor(p => p.RadiusInKm)
                 .GreaterThan(0)
