@@ -17,7 +17,7 @@ namespace MAVN.Service.PartnerManagement.Models.Validation.Partner
                 .InclusiveBetween(-180, 180)
                 .WithMessage("Longitude value must be between -180 and 180.")
                 .NotNull()
-                .When(p => string.IsNullOrEmpty(p.CountryIso3Code) || p.Latitude.HasValue) ;
+                .When(p => string.IsNullOrEmpty(p.CountryIso3Code) || p.Latitude.HasValue);
 
             RuleFor(p => p.RadiusInKm)
                 .GreaterThan(0)
