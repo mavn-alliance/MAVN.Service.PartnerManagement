@@ -155,6 +155,9 @@ namespace MAVN.Service.PartnerManagement.DomainServices
             return processedLocations;
         }
 
+        public Task<IReadOnlyList<string>> GetIso3CodesForLocations()
+            => _locationRepository.GetIso3CodesForAllLocations();
+
         private void SetGeohash(Location location)
         {
             location.Geohash = IsCoordinatesDetermined(location)

@@ -15,5 +15,7 @@ namespace MAVN.Service.PartnerManagement.Domain.Services
 
         Task<IReadOnlyCollection<Location>> UpdateRangeAsync(Partner partner,
             IReadOnlyCollection<Location> locations, IReadOnlyCollection<Location> existingLocations);
+
+        Task<IReadOnlyList<string>> GetIso3CodesForLocations();
     }
 }
