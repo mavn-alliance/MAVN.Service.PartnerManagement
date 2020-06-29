@@ -11,39 +11,31 @@ namespace MAVN.Service.PartnerManagement.Models.Validation.ContactPerson
         public ContactPersonModelValidation()
         {
             RuleFor(p => p.FirstName)
-                .NotNull()
-                .NotEmpty()
-                .When(x => !string.IsNullOrEmpty(x.Email) || !string.IsNullOrEmpty(x.LastName) || !string.IsNullOrEmpty(x.PhoneNumber))
                 .MinimumLength(2)
                 .MaximumLength(50)
                 .WithMessage("The First Name should be present and within a range of 2 to 50 characters long.")
                 .Must(o => o != null && _onlyLettersRegex.IsMatch(o))
-                .WithMessage("First Name should contains only letters");
+                .WithMessage("First Name should contains only letters")
+                .When(x => !string.IsNullOrEmpty(x.FirstName));
 
             RuleFor(p => p.LastName)
-                .NotNull()
-                .NotEmpty()
-                .When(x => !string.IsNullOrEmpty(x.Email) || !string.IsNullOrEmpty(x.FirstName) || !string.IsNullOrEmpty(x.PhoneNumber))
                 .MinimumLength(2)
                 .MaximumLength(50)
                 .WithMessage("The Last Name should be present and within a range of 2 to 50 characters long.")
                 .Must(o => o != null && _onlyLettersRegex.IsMatch(o))
-                .WithMessage("Last Name should contains only letters");
+                .WithMessage("Last Name should contains only letters")
+                .When(x => !string.IsNullOrEmpty(x.LastName));
 
             RuleFor(p => p.Email)
-                .NotNull()
-                .NotEmpty()
-                .When(x => !string.IsNullOrEmpty(x.FirstName) || !string.IsNullOrEmpty(x.LastName) || !string.IsNullOrEmpty(x.PhoneNumber))
                 .EmailAddress()
-                .WithMessage("The Email should be present and within a valid email address.");
+                .WithMessage("The Email should be present and within a valid email address.")
+                .When(x => !string.IsNullOrEmpty(x.Email));
 
             RuleFor(p => p.PhoneNumber)
-                .NotNull()
-                .NotEmpty()
-                .When(x => !string.IsNullOrEmpty(x.Email) || !string.IsNullOrEmpty(x.FirstName) || !string.IsNullOrEmpty(x.LastName))
                 .MinimumLength(3)
                 .MaximumLength(30)
-                .WithMessage("The Phone number should be present and within a range of 3 to 30 characters long.");
+                .WithMessage("The Phone number should be present and within a range of 3 to 30 characters long.")
+                .When(x => !string.IsNullOrEmpty(x.PhoneNumber));
         }
     }
 }

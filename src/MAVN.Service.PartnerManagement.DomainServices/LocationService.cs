@@ -66,8 +66,13 @@ namespace MAVN.Service.PartnerManagement.DomainServices
 
                 _log.Info("Location creating", context: $"location: {location.ToJson()}");
 
-                if(location.ContactPerson != null && !string.IsNullOrEmpty(location.ContactPerson.Email))
+                if (location.ContactPerson != null && (!string.IsNullOrEmpty(location.ContactPerson.Email) ||
+                                                       !string.IsNullOrEmpty(location.ContactPerson.FirstName) ||
+                                                       !string.IsNullOrEmpty(location.ContactPerson.LastName) ||
+                                                       !string.IsNullOrEmpty(location.ContactPerson.PhoneNumber)))
+                {
                     customerProfileCreateActions.Add(CreateOrUpdatePartnerContact(location));
+                }
             }
 
             await Task.WhenAll(customerProfileCreateActions);
@@ -120,8 +125,14 @@ namespace MAVN.Service.PartnerManagement.DomainServices
                     await SetCountryIso3Code(location);
 
                     _log.Info("Location updating", context: $"location: {location.ToJson()}");
-                    if (location.ContactPerson != null && !string.IsNullOrEmpty(location.ContactPerson.Email))
+
+                    if (location.ContactPerson != null && (!string.IsNullOrEmpty(location.ContactPerson.Email) ||
+                                                           !string.IsNullOrEmpty(location.ContactPerson.FirstName) ||
+                                                           !string.IsNullOrEmpty(location.ContactPerson.LastName) ||
+                                                           !string.IsNullOrEmpty(location.ContactPerson.PhoneNumber)))
+                    {
                         customerProfileUpdateActions.Add(CreateOrUpdatePartnerContact(location));
+                    }
                     else
                         deleteActions.Add(_customerProfileClient.PartnerContact.DeleteIfExistAsync(location.Id.ToString()));
                 }
@@ -138,8 +149,13 @@ namespace MAVN.Service.PartnerManagement.DomainServices
 
                     _log.Info("Location creating", context: $"location: {location.ToJson()}");
 
-                    if (location.ContactPerson != null && !string.IsNullOrEmpty(location.ContactPerson.Email))
+                    if (location.ContactPerson != null && (!string.IsNullOrEmpty(location.ContactPerson.Email) ||
+                                                           !string.IsNullOrEmpty(location.ContactPerson.FirstName) ||
+                                                           !string.IsNullOrEmpty(location.ContactPerson.LastName) ||
+                                                           !string.IsNullOrEmpty(location.ContactPerson.PhoneNumber)))
+                    {
                         customerProfileCreateActions.Add(CreateOrUpdatePartnerContact(location));
+                    }
                 }
             }
 
@@ -185,7 +201,7 @@ namespace MAVN.Service.PartnerManagement.DomainServices
                     LocationId = location.Id.ToString(),
                     FirstName = location.ContactPerson.FirstName,
                     LastName = location.ContactPerson.LastName,
-                    Email = location.ContactPerson.Email.ToLower(),
+                    Email = location.ContactPerson.Email?.ToLower(),
                     PhoneNumber = location.ContactPerson.PhoneNumber
                 });
         }
