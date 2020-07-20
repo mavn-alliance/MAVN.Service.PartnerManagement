@@ -1,12 +1,12 @@
 ﻿using System.Data.Common;
 using JetBrains.Annotations;
-using MAVN.Common.MsSql;
+using MAVN.Persistence.PostgreSQL.Legacy;
 using MAVN.Service.PartnerManagement.MsSqlRepositories.Entities;
 using Microsoft.EntityFrameworkCore;
 
 namespace MAVN.Service.PartnerManagement.MsSqlRepositories
 {
-    public class PartnerManagementContext : MsSqlContext
+    public class PartnerManagementContext : PostgreSQLContext
     {
         private const string Schema = "partner_management";
 
@@ -42,10 +42,10 @@ namespace MAVN.Service.PartnerManagement.MsSqlRepositories
         {
         }
 
-        protected override void OnLykkeModelCreating(ModelBuilder modelBuilder)
+        protected override void OnMAVNModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<PartnerEntity>()
-                .OwnsMany(e => e.Locations);
+                .HasMany(e => e.Locations);
 
             modelBuilder.Entity<PartnerEntity>()
                 .HasIndex(p => p.ClientId);

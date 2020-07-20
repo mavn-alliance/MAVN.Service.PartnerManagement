@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
-using MAVN.Common.MsSql;
+using MAVN.Persistence.PostgreSQL.Legacy;
 using MAVN.Service.PartnerManagement.Domain.Models;
 using MAVN.Service.PartnerManagement.Domain.Models.Dto;
 using MAVN.Service.PartnerManagement.Domain.Repositories;
@@ -15,11 +15,11 @@ namespace MAVN.Service.PartnerManagement.MsSqlRepositories.Repositories
 {
     public class PartnerRepository: IPartnerRepository
     {
-        private readonly MsSqlContextFactory<PartnerManagementContext> _msSqlContextFactory;
+        private readonly PostgreSQLContextFactory<PartnerManagementContext> _msSqlContextFactory;
         private readonly IMapper _mapper;
 
         public PartnerRepository(
-            MsSqlContextFactory<PartnerManagementContext> msSqlContextFactory,
+            PostgreSQLContextFactory<PartnerManagementContext> msSqlContextFactory,
             IMapper mapper)
         {
             _msSqlContextFactory = msSqlContextFactory;

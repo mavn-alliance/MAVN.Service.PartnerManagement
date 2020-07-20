@@ -1,4 +1,4 @@
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
 using MAVN.Numerics;
 using MAVN.Service.PartnerManagement.Domain.Models;
@@ -20,7 +20,7 @@ namespace MAVN.Service.PartnerManagement.MsSqlRepositories.Entities
         [Column("client_id")]
         public string ClientId { get; set; }
 
-        [Column("amount_in_tokens", TypeName = "nvarchar(64)")]
+        [Column("amount_in_tokens")]
         public Money18? AmountInTokens { get; set; }
 
         [Column("amount_in_currency")]

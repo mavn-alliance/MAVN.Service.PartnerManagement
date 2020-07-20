@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Threading.Tasks;
-using MAVN.Common.MsSql;
+using MAVN.Persistence.PostgreSQL.Legacy;
 using MAVN.Service.PartnerManagement.Domain.Models;
 using MAVN.Service.PartnerManagement.Domain.Repositories;
 using MAVN.Service.PartnerManagement.MsSqlRepositories.Entities;
@@ -10,9 +10,9 @@ namespace MAVN.Service.PartnerManagement.MsSqlRepositories.Repositories
 {
     public class PartnerLinkingRepository : IPartnerLinkingRepository
     {
-        private readonly MsSqlContextFactory<PartnerManagementContext> _contextFactory;
+        private readonly PostgreSQLContextFactory<PartnerManagementContext> _contextFactory;
 
-        public PartnerLinkingRepository(MsSqlContextFactory<PartnerManagementContext> contextFactory)
+        public PartnerLinkingRepository(PostgreSQLContextFactory<PartnerManagementContext> contextFactory)
         {
             _contextFactory = contextFactory;
         }
